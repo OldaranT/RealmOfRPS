@@ -11,9 +11,9 @@
         <button id="call">call the room</button>
 
         <div class="choices">
-            <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="512" width="512"/>
-            <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="512" width="512"/>
-            <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="512" width="512"/>
+            <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>
+            <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>
+            <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>
         </div>
 
 <!--Scripts-->
@@ -43,11 +43,6 @@
      console.log('calling');
  })
 
-//    document.getElementById("call").onclick = function(){
-//        socket.emit('Call');
-//        console.log('calling');
-//    };
-
  socket.on('message', function (data) {
      alert(data);
      console.log('incoming message: ', data);
@@ -57,16 +52,19 @@
  $('#image_scissor').click(function () {
      console.log("Schaar geklikt!")
      socket.emit('choice', "scissor");
+     $('.choices').addClass('hide');
  })
 
  $('#image_paper').click(function () {
      console.log("Papier geklikt!")
      socket.emit('choice', "paper");
+     $('.choices').addClass('hide');
  })
 
  $('#image_rock').click(function () {
      console.log("Steen geklikt!")
      socket.emit('choice', "rock");
+     $('.choices').addClass('hide');
  })
 
  socket.on('choice', function(data, user_id) {
