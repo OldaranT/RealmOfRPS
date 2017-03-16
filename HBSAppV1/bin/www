@@ -81,6 +81,8 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
+var users = new array();
+
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
@@ -92,15 +94,17 @@ function onListening() {
 io.sockets.on('connection', function (socket) {
     console.log("user "+socket.id+" connected");
     socket.on('messages', function (data) {
+        //users.add(new player(socket.id, null, null)); Speler toevoegen aan lijst!
         console.log("message " + data + " received by " + socket.id);
         socket.broadcast.emit('messages', data);
     });
+    socket.on('disconnect', function () {
+        console.log("user "+socket.id+" disconnected");
+    });
 });
-
 
 io.on('connection', function(client) {
     console.log('Client connected...');
-
     client.on('join', function(data) {
         console.log(data);
     });
@@ -111,8 +115,15 @@ io.on('connection', function(client) {
     });
 
     client.on('choice', function(data) {
+        console.log("Amount of players:" + io.engine.clientsCount);
         client.emit('choice', data, client.id);
         client.broadcast.emit('choice',data, client.id);
     });
 
 });
+
+function player(id,choice,name){
+    this.id = id;
+    this.choice = choice;
+    this.name = name;
+}
