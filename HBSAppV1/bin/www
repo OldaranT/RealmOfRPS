@@ -9,12 +9,23 @@ var debug = require('debug')('hbsappv1:server');
 var http = require('http');
 
 /**
+ * Colors voor socket log
+ */
+
+var ColorWHBR = "\x1b[37m\x1b[1m"; //White Bright
+var ColorGRBR = "\x1b[32m\x1b[1m"; //Green Bright
+var ColorCYBR ="\x1b[36m\x1b[1m"; //Cyan Bright
+var ColorYEBR ="\x1b[33m\x1b[1m"; //Yellow Bright
+var ColorREBR = "\x1b[31m\x1b[1m"; //Green Bright
+var ColorRE ="\x1b[0m" // color reset
+
+/**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '4200');
 app.set('port', port);
-console.log('using port: ' + port);
+console.log('using port:'+ ColorCYBR + port + ColorRE + "\n");
 
 /**
  * Create HTTP server.
@@ -98,14 +109,14 @@ var DummyRoom = "";
 
 
 io.sockets.on('connection', function (socket) {
-    console.log("user "+socket.id+" connected");
+    console.log("user "+ ColorGRBR + socket.id + ColorRE+" connected" + "\n");
     socket.on('messages', function (data) {
         //users.add(new player(socket.id, null, null)); Speler toevoegen aan lijst!
-        console.log("message " + data + " received by " + socket.id);
+        console.log("message " + data + " received by " + ColorWHBR + socket.id + ColorRE);
         socket.broadcast.emit('messages', data);
     });
     socket.on('disconnect', function () {
-        console.log("user "+socket.id+" disconnected");
+        console.log("user "+ ColorREBR + socket.id + ColorRE +" disconnected" + "\n");
     });
 });
 
@@ -114,36 +125,23 @@ io.sockets.on('connection', function (socket) {
         Rooms = room;
         socket.join(Rooms);
         DummyRoom = room + room;
-        console.log("User joined room: " + Rooms);
+        console.log("User " + ColorWHBR + socket.id + ColorRE + " joined room: " + ColorGRBR + Rooms + ColorRE + "\n");
     })
 })
 
 io.sockets.on('connection', function (socket) {
     socket.on('Call', function () {
 
-        io.sockets.in(Rooms).emit('message', 'Hello and welcome to room: ' + Rooms);
+        io.sockets.in(Rooms).emit('message', 'Hello and welcome to room: ' + Rooms + "\n");
 
-        io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?');
+        io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?' + "\n");
 
-        console.log('messages send');
+        console.log('messages send' + "\n");
     })
 })
 
-io.on('connection', function(client) {
-    console.log('Client connected...');
-    client.on('join', function(data) {
-        console.log(data);
-    });
-
-});
-
 
 io.on('connection', function(client) {
-    // console.log('Client connected...');
-    //
-    // client.on('join', function(data) {
-    //     console.log(data);
-    // });
 
     client.on('messages', function(data) {
         client.emit('broad', data);
@@ -151,7 +149,7 @@ io.on('connection', function(client) {
     });
 
     client.on('choice', function(data) {
-        console.log("Amount of players:" + io.engine.clientsCount);
+        console.log("Amount of players: " + ColorYEBR + io.engine.clientsCount + ColorRE + "\n");
         client.emit('choice', data, client.id);
         client.broadcast.emit('choice',data, client.id);
     });
