@@ -1,9 +1,10 @@
         <h1>Hello World!</h1>
         <div id="future"></div>
         <form id="form" id="chat_form">
-            <input id="chat_input" type="text">
-            <input type="submit" value="Send">
+            <input id="Room" type="text">
+            <input type="submit" value="join">
         </form>
+        <button id="call">call the room</button>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
          <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
@@ -17,10 +18,27 @@
          $('#future').html(data);
    });
 
+ var room = "";
+
  $('form').submit(function(e){
      e.preventDefault();
-     var message = $('#chat_input').val();
-     socket.emit('messages', message);
-     console.log(message)
+     room = $('#Room').val();
+     socket.emit('Room', room);
+     console.log(room);
  });
+
+ $('#call').click(function () {
+     socket.emit('Call');
+     console.log('calling');
+ })
+
+//    document.getElementById("call").onclick = function(){
+//        socket.emit('Call');
+//        console.log('calling');
+//    };
+
+ socket.on('message', function (data) {
+     alert(data);
+     console.log('incoming message: ', data);
+ })
 </script>
