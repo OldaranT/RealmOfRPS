@@ -17,7 +17,7 @@ var ColorGRBR = "\x1b[32m\x1b[1m"; //Green Bright
 var ColorCYBR ="\x1b[36m\x1b[1m"; //Cyan Bright
 var ColorYEBR ="\x1b[33m\x1b[1m"; //Yellow Bright
 var ColorREBR = "\x1b[31m\x1b[1m"; //Green Bright
-var ColorRE ="\x1b[0m" // color reset
+var ColorRE ="\x1b[0m"; // color reset
 
 /**
  * Get port from environment and store in Express.
@@ -93,8 +93,6 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-//var users = new array();
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
@@ -114,6 +112,7 @@ io.sockets.on('connection', function (socket) {
         //users.add(new player(socket.id, null, null)); Speler toevoegen aan lijst!
         console.log("message " + data + " received by " + ColorWHBR + socket.id + ColorRE);
         socket.broadcast.emit('messages', data);
+
     });
     socket.on('disconnect', function () {
         console.log("user "+ ColorREBR + socket.id + ColorRE +" disconnected" + "\n");
@@ -127,7 +126,7 @@ io.sockets.on('connection', function (socket) {
         DummyRoom = room + room;
         console.log("User " + ColorWHBR + socket.id + ColorRE + " joined room: " + ColorGRBR + Rooms + ColorRE + "\n");
     })
-})
+});
 
 io.sockets.on('connection', function (socket) {
     socket.on('Call', function () {
@@ -137,10 +136,8 @@ io.sockets.on('connection', function (socket) {
         io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?' + "\n");
 
         console.log('messages send' + "\n");
-    })
-})
-
-
+    });
+});
 io.on('connection', function(client) {
 
     client.on('messages', function(data) {
@@ -156,8 +153,8 @@ io.on('connection', function(client) {
 
 });
 
-function player(id,choice,name){
+function player(id,choice){
     this.id = id;
     this.choice = choice;
-    this.name = name;
+    this.status = "waiting";
 }
