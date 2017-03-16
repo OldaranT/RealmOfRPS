@@ -1,21 +1,36 @@
-        <h1>Hello World!</h1>
+<!--Resources-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<!--HTML-->
+        <h1>Steen Papier schaar!</h1>
         <div id="future"></div>
         <form id="form" id="chat_form">
             <input id="Room" type="text">
             <input type="submit" value="join">
         </form>
         <button id="call">call the room</button>
-         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+
+        <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="512" width="512"/>
+        <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="512" width="512"/>
+        <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="512" width="512"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
          <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
 <script>
     var con =  'http://localhost:4200';
 
- var socket = io.connect(con);
+
+
+<!--Scripts-->
+    var socket = io.connect(con);
+
  socket.on('connect', function(data) {
     socket.emit('join', 'Hello World from client');
  });
+
  socket.on('broad', function(data) {
-         $('#future').html(data);
+         $('body').append("Message: " + data + "<br>");
    });
 
  var room = "";
@@ -41,4 +56,25 @@
      alert(data);
      console.log('incoming message: ', data);
  })
+
+// Added since first release
+ $('#image_scissor').click(function () {
+     console.log("Schaar geklikt!")
+     socket.emit('choice', "scissor");
+ })
+
+ $('#image_paper').click(function () {
+     console.log("Papier geklikt!")
+     socket.emit('choice', "paper");
+ })
+
+ $('#image_rock').click(function () {
+     console.log("Steen geklikt!")
+     socket.emit('choice', "rock");
+ })
+
+ socket.on('choice', function(data, user_id) {
+     $('body').append("keuze: " + data + " " + user_id + "<br>");
+ });
+
 </script>

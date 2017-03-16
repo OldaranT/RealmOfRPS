@@ -147,4 +147,9 @@ io.on('connection', function(client) {
         client.broadcast.emit('broad',data);
     });
 
+    client.on('choice', function(data) {
+        client.emit('choice', data, client.id);
+        client.broadcast.emit('choice',data, client.id);
+    });
+
 });
