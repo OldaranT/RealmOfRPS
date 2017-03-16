@@ -15,7 +15,7 @@
 
 <!--Scripts-->
 <script>
- var socket = io.connect('http://192.168.1.20:4200');
+ var socket = io.connect('http://192.168.1.21:4200');
  socket.on('connect', function(data) {
     socket.emit('join', 'Hello World from client');
  });
@@ -34,6 +34,16 @@
  $('#image_scissor').click(function () {
      console.log("Schaar geklikt!")
      socket.emit('choice', "scissor");
+ })
+
+ $('#image_paper').click(function () {
+     console.log("Papier geklikt!")
+     socket.emit('choice', "paper");
+ })
+
+ $('#image_rock').click(function () {
+     console.log("Steen geklikt!")
+     socket.emit('choice', "rock");
  })
 
  socket.on('choice', function(data, user_id) {
