@@ -22,7 +22,7 @@
     var conJordy =  'http://192.168.1.21:4200';
     var conTim =  'http://192.168.1.20:4200';
     var conNick = 'http://localhost:4200';
-    var socket = io.connect(conNick);
+    var socket = io.connect(conJordy);
 
  socket.on('connect', function(data) {
 
@@ -34,7 +34,6 @@
 
  socket.on('UpdateAmountOfPlayers', function (amount_of_players) {
      $('.player_count').html('<p>Amount of players: ' + amount_of_players +'</p>');
-     console.log("testo");
  })
 
  var room = "";
