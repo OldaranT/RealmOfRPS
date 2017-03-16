@@ -111,8 +111,8 @@ io.on('connection', function(client) {
     });
 
     client.on('choice', function(data) {
-        client.emit('choice', data);
-        client.broadcast.emit('choice',data);
+        client.emit('choice', data, client.id);
+        client.broadcast.emit('choice',data, client.id);
     });
 
 });
