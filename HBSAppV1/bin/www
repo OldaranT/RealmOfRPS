@@ -105,19 +105,14 @@ io.on('connection', function(client) {
         console.log(data);
     });
 
-});
-
-
-io.on('connection', function(client) {
-    console.log('Client connected...');
-
-    client.on('join', function(data) {
-        console.log(data);
-    });
-
     client.on('messages', function(data) {
         client.emit('broad', data);
         client.broadcast.emit('broad',data);
+    });
+
+    client.on('choice', function(data) {
+        client.emit('choice', data);
+        client.broadcast.emit('choice',data);
     });
 
 });
