@@ -9,12 +9,23 @@ var debug = require('debug')('hbsappv1:server');
 var http = require('http');
 
 /**
+ * Colors voor socket log
+ */
+
+var ColorWHBR = "\x1b[37m\x1b[1m"; //White Bright
+var ColorGRBR = "\x1b[32m\x1b[1m"; //Green Bright
+var ColorCYBR ="\x1b[36m\x1b[1m"; //Cyan Bright
+var ColorYEBR ="\x1b[33m\x1b[1m"; //Yellow Bright
+var ColorREBR = "\x1b[31m\x1b[1m"; //Green Bright
+var ColorRE ="\x1b[0m"; // color reset
+
+/**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '4200');
 app.set('port', port);
-console.log('using port: ' + port);
+console.log('using port:'+ ColorCYBR + port + ColorRE + "\n");
 
 /**
  * Create HTTP server.
@@ -90,51 +101,38 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-
 var Rooms = "";
 var DummyRoom = "";
 
 
 io.sockets.on('connection', function (socket) {
-
-    console.log("user "+socket.id+" connected");
-    socket.on('messages', function (data) {
-        console.log("message " + data + " received by " + socket.id);
-        socket.broadcast.emit('messages', data);
-    });
+    console.log("user "+ ColorGRBR + socket.id + ColorRE+" connected" + "\n");
+    socket.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
+    socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
     socket.on('disconnect', function () {
-        console.log("user "+socket.id+" disconnected");
+        console.log("user "+ ColorREBR + socket.id + ColorRE +" disconnected" + "\n");
+        socket.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
+        socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
     });
 
-});
-
-io.sockets.on('connection', function (socket) {
     socket.on('Room', function (room) {
         Rooms = room;
         socket.join(Rooms);
         DummyRoom = room + room;
-        console.log("User joined room: " + Rooms);
+        console.log("User " + ColorWHBR + socket.id + ColorRE + " joined room: " + ColorGRBR + Rooms + ColorRE + "\n");
     })
-})
 
-io.sockets.on('connection', function (socket) {
     socket.on('Call', function () {
 
-        io.sockets.in(Rooms).emit('message', 'Hello and welcome to room: ' + Rooms);
+        io.sockets.in(Rooms).emit('message', 'Hello and welcome to room: ' + Rooms + "\n");
 
-        io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?');
+        io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?' + "\n");
+        console.log('messages send' + "\n");
+    });
 
-        console.log('messages send');
-    })
-})
+});
 
 io.on('connection', function(client) {
-    console.log('Client connected...');
-    client.on('join', function(data) {
-        //console.log(data); Weergeven van data verkregen van client
-        client.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
-        client.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
-    });
 
     client.on('messages', function(data) {
         client.emit('broad', data);
@@ -142,7 +140,7 @@ io.on('connection', function(client) {
     });
 
     client.on('choice', function(data) {
-        console.log("Amount of players:" + io.engine.clientsCount);
+        console.log("Amount of players: " + ColorYEBR + io.engine.clientsCount + ColorRE + "\n");
         client.emit('choice', data, client.id);
         client.broadcast.emit('choice',data, client.id);
     });

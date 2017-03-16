@@ -23,7 +23,7 @@
     var socket = io.connect(con);
 
  socket.on('connect', function(data) {
-    socket.emit('join', 'Hello World from client'); //wanneer de client connect is data sturen naar server
+
  });
 
  socket.on('broad', function(data) {
