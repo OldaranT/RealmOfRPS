@@ -14,6 +14,7 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '4200');
 app.set('port', port);
+console.log('using port: ' + port);
 
 /**
  * Create HTTP server.
@@ -81,7 +82,7 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-var users = new array();
+//var users = new array();
 
 function onListening() {
   var addr = server.address();
@@ -90,6 +91,11 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+var Rooms = "";
+var DummyRoom = "";
+
 
 io.sockets.on('connection', function (socket) {
     console.log("user "+socket.id+" connected");
@@ -103,11 +109,41 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
+io.sockets.on('connection', function (socket) {
+    socket.on('Room', function (room) {
+        Rooms = room;
+        socket.join(Rooms);
+        DummyRoom = room + room;
+        console.log("User joined room: " + Rooms);
+    })
+})
+
+io.sockets.on('connection', function (socket) {
+    socket.on('Call', function () {
+
+        io.sockets.in(Rooms).emit('message', 'Hello and welcome to room: ' + Rooms);
+
+        io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?');
+
+        console.log('messages send');
+    })
+})
+
 io.on('connection', function(client) {
     console.log('Client connected...');
     client.on('join', function(data) {
         console.log(data);
     });
+
+});
+
+
+io.on('connection', function(client) {
+    // console.log('Client connected...');
+    //
+    // client.on('join', function(data) {
+    //     console.log(data);
+    // });
 
     client.on('messages', function(data) {
         client.emit('broad', data);

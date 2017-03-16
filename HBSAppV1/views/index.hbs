@@ -5,17 +5,22 @@
         <h1>Steen Papier schaar!</h1>
         <div id="future"></div>
         <form id="form" id="chat_form">
-            <input id="chat_input" type="text">
-            <input type="submit" value="Send">
+            <input id="Room" type="text">
+            <input type="submit" value="join">
         </form>
+        <button id="call">call the room</button>
 
-        <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="512" width="512"/>
-        <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="512" width="512"/>
-        <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="512" width="512"/>
+        <div class="choices">
+            <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="512" width="512"/>
+            <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="512" width="512"/>
+            <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="512" width="512"/>
+        </div>
 
 <!--Scripts-->
 <script>
- var socket = io.connect('http://192.168.1.21:4200');
+    var con =  'http://192.168.1.21:4200';
+    var socket = io.connect(con);
+
  socket.on('connect', function(data) {
     socket.emit('join', 'Hello World from client');
  });
@@ -24,12 +29,30 @@
          $('body').append("Message: " + data + "<br>");
    });
 
+ var room = "";
+
  $('form').submit(function(e){
      e.preventDefault();
-     var message = $('#chat_input').val();
-     socket.emit('messages', message);
-     console.log(message)
+     room = $('#Room').val();
+     socket.emit('Room', room);
+     console.log("User joined room: " + room);
  });
+
+ $('#call').click(function () {
+     socket.emit('Call');
+     console.log('calling');
+ })
+
+//    document.getElementById("call").onclick = function(){
+//        socket.emit('Call');
+//        console.log('calling');
+//    };
+
+ socket.on('message', function (data) {
+     alert(data);
+     console.log('incoming message: ', data);
+ })
+
 // Added since first release
  $('#image_scissor').click(function () {
      console.log("Schaar geklikt!")
@@ -49,4 +72,5 @@
  socket.on('choice', function(data, user_id) {
      $('body').append("keuze: " + data + " " + user_id + "<br>");
  });
+
 </script>
