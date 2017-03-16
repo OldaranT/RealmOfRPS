@@ -23,11 +23,10 @@
 
 
 <!--Scripts-->
+
     var socket = io.connect(con);
 
- socket.on('connect', function(data) {
-    socket.emit('join', 'Hello World from client');
- });
+
 
  socket.on('broad', function(data) {
          $('body').append("Message: " + data + "<br>");
@@ -39,11 +38,13 @@
      e.preventDefault();
      room = $('#Room').val();
      socket.emit('Room', room);
+     // dit verwijderd de join room form voor testen uitgeschakeld
+//     $('form').html('');
      console.log(room);
  });
 
  $('#call').click(function () {
-     socket.emit('Call');
+     socket.emit('Call', room);
      console.log('calling');
  })
 
