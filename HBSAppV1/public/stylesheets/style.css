@@ -10,3 +10,14 @@ a {
 .hide {
   display: none;
 }
+
+#background{
+  position: absolute;
+  height: 100%;
+}
+
+body {
+  background-image: url("http://i.imgur.com/xeE1PN5.jpg");
+  height: 100%;
+  width: 100%;
+}

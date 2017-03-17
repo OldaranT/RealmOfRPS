@@ -1,0 +1,26 @@
+<!--Resources-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<!--HTML-->
+<h1>Slpash Screen!</h1>
+    <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>
+    <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>
+    <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>
+</div>
+
+<!--Scripts-->
+<script>
+    var conJordy =  'http://192.168.1.21:4200';
+    var conTim =  'http://192.168.1.20:4200';
+    var conNick = 'http://localhost:4200';
+    var socket = io.connect(conJordy);
+
+    socket.on('connect', function(data) {
+
+    });
+
+    socket.on('broad', function(data) {
+        $('body').append("Message: " + data + "<br>");
+    });
+
+</script>

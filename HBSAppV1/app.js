@@ -9,6 +9,7 @@ var io = require('socket.io')(server);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var splashScreen = require('./routes/splashScreen');
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/splashScreen', splashScreen);
 
 //server.listen(4200);
 
