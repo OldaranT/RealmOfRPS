@@ -21,3 +21,61 @@ body {
   height: 100%;
   width: 100%;
 }
+
+#splashImage_scissor{
+  position: absolute;
+  height: 0;
+  margin: 0 auto;
+  animation: scissorAnimation 2s;
+}
+
+#splashImage_paper{
+  position: absolute;
+  height: 0;
+  margin: 0 auto;
+  animation: paperAnimation 2s;
+  animation-delay: 0.5s;
+}
+
+#splashImage_rock{
+  position: absolute;
+  height: 0;
+  margin: 0 auto;
+  animation: rockAnimation 2s;
+}
+
+@keyframes scissorAnimation {
+  0% {
+    height: 200px;
+    margin-left: 80%;
+    margin-top: 50%;
+    height: 600px;
+  }
+  100% {
+    margin-left: -30%;
+    margin-top: 0%;
+  }
+}
+
+@keyframes paperAnimation {
+  0% {
+    height: 200px;
+    margin-left: -30%;
+    margin-top: 50%;
+    height: 600px;s
+  }
+  100% {
+    margin-left: 90%;
+    margin-top: -10%;
+    transform: rotate(200deg);
+  }
+}
+
+@keyframes rockAnimation {
+  0% {
+    height: 200px;
+  }
+  100% {
+
+  }
+}
