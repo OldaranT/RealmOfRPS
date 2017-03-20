@@ -101,7 +101,7 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-
+var PlayerArray = [];
 var RoomArray = [];
 var JSONRooms = '[]';
 var Index = '';
@@ -120,7 +120,9 @@ io.sockets.on('connection', function (socket) {
     console.log("user " + ColorGRBR + socket.id + ColorRE + " connected" + "\n");
     socket.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
     socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
+    PlayerArray.push(new player(socket.id, null));
     socket.on('disconnect', function () {
+
         console.log("user " + ColorREBR + socket.id + ColorRE + " disconnected" + "\n");
         socket.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
         socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);

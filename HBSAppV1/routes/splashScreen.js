@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Realm Of RPS' });
+    res.render('splashScreen', { title: 'SplashScreen' });
 });
 
 module.exports = router;
