@@ -5,7 +5,8 @@
         <h1>Steen Papier schaar!</h1>
         <div id="future"></div>
         <form id="form" id="chat_form">
-            <input id="Room" type="text">
+            <input id="Name" type="text" placeholder="Username">
+            <input id="Room" type="text" placeholder="Room Name">
             <input type="submit" value="join">
         </form>
         <button id="call">call the room</button>
@@ -21,6 +22,7 @@
 <script>
     var conJordy =  'http://192.168.1.21:4200';
     var conTim =  'http://192.168.1.20:4200';
+//    var conNick = 'http://192.168.1.22:4200';
     var conNick = 'http://localhost:4200';
     var socket = io.connect(conNick);
 
@@ -38,11 +40,13 @@
  })
 
  var room = "";
+ var Name = "";
 
  $('form').submit(function(e){
      e.preventDefault();
+     Name = $('#Name').val();
      room = $('#Room').val();
-     socket.emit('Room', room);
+     socket.emit('Room', room, Name);
      // dit verwijderd de join room form voor testen uitgeschakeld
 //     $('form').html('');
      console.log("User joined room: " + room);
