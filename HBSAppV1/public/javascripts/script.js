@@ -1,5 +1,6 @@
 $( document ).ready(function() {
 
+
 var conJordy =  'http://192.168.1.21:4200';
 var conTim =  'http://192.168.1.20:4200';
     var conNick =  'http://192.168.1.22:4200';
@@ -8,6 +9,9 @@ var socket = io.connect(conNick);
 socket.on('connect', function(data) {
 
 });
+socket.on('heartbeat', function (data) {
+    console.log(data);
+})
 
 socket.on('broad', function(data) {
     $('body').append("Message: " + data + "<br>");
@@ -61,7 +65,14 @@ socket.on('choice', function(data, user_id) {
     $('body').append("keuze: " + data + " " + user_id + "<br>");
 });
 
+
 ListRooms();
+
+    /*Audio*/
+    var SuccesAudio = "../audio/162473-successful.mp3";
+    $('#image_rock,#image_paper,#image_scissor').click(function() {
+        new Audio(SuccesAudio).play();
+    });
 
 });
 
@@ -82,3 +93,4 @@ function ListRooms() {
         $('<li>Hello World</li>').appendTo('#RoomList');
     // }
 }
+
