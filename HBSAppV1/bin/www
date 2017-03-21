@@ -102,18 +102,6 @@ function onListening() {
 }
 
 var PlayerArray = [];
-var RoomArray = [];
-var JSONRooms = '[]';
-var Index = '';
-var NameArray = [];
-var Names = '';
-var UserArray = [];
-var UserID = [];
-
-// Rooms en dummyRoom zijn test variabelen
-
-var Rooms = "";
-var DummyRoom = "";
 
 
 io.sockets.on('connection', function (socket) {
@@ -127,62 +115,50 @@ io.sockets.on('connection', function (socket) {
         socket.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
         socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
     });
+});
 
+var usernames = {};
 
+var rooms = ['Lobby'];
 
-    socket.on('Room', function (room, name) {
-
-        RoomArray = JSON.parse(JSONRooms);
-        Index = RoomArray.map(function (r) {
-            return r['roomName'];
-        }).indexOf(room);
-        console.log(Index + "\n");
-        if (Index < 0) {
-            NameArray = [];
-            NameArray.push({"Username" : name, "UserID" : socket.id});
-            RoomArray.push({"roomName" : room , "Users" : NameArray});
-            console.log(RoomArray[0].Users[0].Username + '\n');
-            // getNames(room);
-            // console.log(ColorCYBR + Names + ColorRE + 'hello');
-            JSONRooms = JSON.stringify(RoomArray);
-            console.log(JSONRooms + "\n" + ColorYEBR + "JSON array geprint!" + ColorRE);
-        }
-        else{
-            UserArray = NamesArray(Index, RoomArray);
-            UserID = UserIDArray(Index, RoomArray);
-            if(UserID.indexOf(socket.id)<0){
-                if(UserArray.indexOf(name)<0){
-                    addNames(Index, name);
-                    getNames(Index);
-                    console.log(ColorCYBR + Names + ColorRE + 'hello');
-                    // console.log(ColorGRBR + NamesArray(Index, RoomArray) + ColorRE);
-                    JSONRooms = JSON.stringify(RoomArray);
-                }else{
-                    console.log(ColorREBR + "Username already in use!" + ColorRE);
-                }
-            }
-            else{
-                console.log(ColorREBR + "you already have a name!" + ColorRE);
-            }
-        }
-        socket.join(room);
-        console.log("User " + ColorWHBR + socket.id + ColorRE + " joined room: " + ColorGRBR + room + ColorRE + "\n");
-    });
-})
-
-
-io.sockets.on('connection', function (socket) {
-    socket.on('Call', function (room) {
-    if (RoomArray.indexOf(room) >=0){
-        io.sockets.in(room).emit('message', 'Hello and welcome to room: ' + Rooms);
-    }else{
-        console.log('no room selected')
-    }
-
-        io.sockets.in(DummyRoom).emit('message', 'anyone in this room yet?' + "\n");
-        console.log('messages send' + "\n");
+io.sockets.on('connection', function(socket) {
+    socket.on('adduser', function(username) {
+        socket.username = username;
+        socket.room = 'Lobby';
+        usernames[username] = username;
+        socket.join('Lobby');
+        socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
+        socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', username + ' has connected to this room');
+        socket.emit('updaterooms', rooms, 'Lobby');
     });
 
+    socket.on('create', function(room) {
+        rooms.push(room);
+        socket.emit('updaterooms', rooms, socket.room);
+    });
+
+    socket.on('sendchat', function(data) {
+        io.sockets["in"](socket.room).emit('updatechat', socket.username, data);
+    });
+
+    socket.on('switchRoom', function(newroom) {
+        var oldroom;
+        oldroom = socket.room;
+        socket.leave(socket.room);
+        socket.join(newroom);
+        socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom);
+        socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');
+        socket.room = newroom;
+        socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
+        socket.emit('updaterooms', rooms, newroom);
+    });
+
+    socket.on('disconnect', function() {
+        delete usernames[socket.username];
+        io.sockets.emit('updateusers', usernames);
+        socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+        socket.leave(socket.room);
+    });
 });
 
 io.on('connection', function(client) {
@@ -209,40 +185,4 @@ function player(id,choice){
     this.status = "waiting";
 }
 
-var i,j,x = "";
-
-function getNames(index) {
-    Names = "";
-    for (i in RoomArray[index].Users){
-        Names += '{"Username" : ' + RoomArray[index].Users[i].Username + '}' ;
-    }
-}
-
-function NamesArray(index, rArray){
-    var testNames = "";
-    // var test = "";
-    var TestArray = [];
-    for(j in rArray[index].Users){
-        test = rArray[index].Users[j].Username;
-        TestArray.push(test);
-    }
-    // for(x in TestArray){
-    //     testNames += TestArray[x] + "\n";
-    // }
-    // return testNames;
-    return TestArray;
-}
-function UserIDArray(index, rArray) {
-    var IDArray = [];
-    for(x in rArray[index].Users){
-        ID = rArray[index].Users[x].UserID;
-        IDArray.push(ID);
-    }
-    return IDArray;
-}
-
-function addNames(index, name) {
-    console.log('{"Username" : ' + name + '}');
-    RoomArray[index].Users.push({"Username" : name});
-}
 

@@ -2,18 +2,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="/javascripts/script.js"></script>
+<script src="/javascripts/roomScript.js"></script>
 
 <!--HTML-->
 <h1>Steen Papier schaar!</h1>
-<div id="future"></div>
-<form id="form" id="chat_form">
-    <input id="Name" type="text" placeholder="Username">
-    <input id="Room" type="text" placeholder="Room Name">
-    <input type="submit" value="join">
-</form>
-<div>
-    <ul id="RoomList">
-    </ul>
+<div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
+    <b>ROOMS</b>
+    <div id="rooms"></div>
+</div>
+
+<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+    <div id="conversation"></div>
+    <input id="data" style="width:200px;" />
+    <input type="button" id="datasend" value="send" />
+</div>
+
+<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+    <div id="room creation"></div>
+    <input id="roomname" style="width:200px;" />
+    <input type="button" id="roombutton" value="create room" />
 </div>
 
 <script>
