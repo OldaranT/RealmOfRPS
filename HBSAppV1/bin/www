@@ -161,9 +161,6 @@ io.sockets.on('connection', function(socket) {
     });
 });
 
-
-
-
 io.on('connection', function(client) {
 
     client.on('messages', function(data) {
