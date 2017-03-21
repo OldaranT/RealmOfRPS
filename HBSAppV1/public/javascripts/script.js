@@ -4,7 +4,7 @@ $( document ).ready(function() {
 var conJordy =  'http://192.168.1.21:4200';
 var conTim =  'http://192.168.1.20:4200';
 var conNick = 'http://localhost:4200';
-var socket = io.connect(conJordy);
+var socket = io.connect(conTim);
 
 socket.on('connect', function(data) {
 
@@ -68,7 +68,13 @@ socket.on('choice', function(data, user_id) {
 /*Audio*/
 var SuccesAudio = "../audio/162473-successful.mp3";
 $('#image_rock,#image_paper,#image_scissor').click(function() {
-    new Audio(SuccesAudio).play();
+    var succesclick = new Audio(SuccesAudio)
+    succesclick.play();
     });
-
 });
+
+
+var BackgroundMusic = "../audio/8bitBackgroundMusic.mp3";
+var BGLoop = new Audio(BackgroundMusic);
+BGLoop.loop = true;
+BGLoop.play();
