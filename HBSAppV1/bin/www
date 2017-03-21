@@ -196,6 +196,10 @@ io.on('connection', function(client) {
         client.broadcast.emit('choice',data, client.id);
     });
 });
+setInterval(heartbeat, 1000);
+function heartbeat() {
+    io.sockets.emit('heartbeat', 'tick');
+}
 
 function player(id,choice){
     this.id = id;
