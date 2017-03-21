@@ -4,7 +4,7 @@
 // $(document).ready(function () {
     var conNick =  'http://192.168.1.22:4200';
     var socket = io.connect(conNick);
-    socket.on('connect', function(){
+    socket.on('connect', function () {
         socket.emit('adduser', prompt("What's your name: "));
     });
 
