@@ -67,7 +67,7 @@ body {
   position: absolute;
   height: 0;
   margin: 0 auto;
-  animation: paperAnimation 3s;
+  animation: paperAnimation 2s;
   animation-delay: 0.5s;
 }
 
@@ -383,6 +383,9 @@ article{
   .main-nav{
     display: inline;
   }
+  #image_logo{
+    height: 32px;
+  }
 }
 
 /*
@@ -401,9 +404,6 @@ article{
   .sub-nav{
     display: inline-block;
     float: right;
-  }
-  nav{
-
   }
 
   .main-nav li:hover{
@@ -441,7 +441,6 @@ article{
   .main-nav{
     width: 80%;
   }
-
 }
 
 
@@ -472,5 +471,4 @@ article{
   -webkit-transform-origin:50% 50%;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
->>>>>>> 72a3f9d74b87ef57d6413d00b1c0c9ef23fe47d6
 }
