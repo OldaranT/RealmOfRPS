@@ -103,7 +103,15 @@ function onListening() {
 
 var PlayerArray = [];
 var RoomArray = [];
+var JSONRooms = '[]';
+var Index = '';
+var NameArray = [];
+var Names = '';
+var UserArray = [];
+var UserID = [];
+
 // Rooms en dummyRoom zijn test variabelen
+
 var Rooms = "";
 var DummyRoom = "";
 
@@ -120,9 +128,40 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
     });
 
-    socket.on('Room', function (room) {
-        if (!RoomArray.indexOf(room) >= 0) {
-            RoomArray.push(room);
+    socket.on('Room', function (room, name) {
+
+        RoomArray = JSON.parse(JSONRooms);
+        Index = RoomArray.map(function (r) {
+            return r['roomName'];
+        }).indexOf(room);
+        console.log(Index + "\n");
+        if (Index < 0) {
+            NameArray = [];
+            NameArray.push({"Username" : name, "UserID" : socket.id});
+            RoomArray.push({"roomName" : room , "Users" : NameArray});
+            console.log(RoomArray[0].Users[0].Username + '\n');
+            // getNames(room);
+            // console.log(ColorCYBR + Names + ColorRE + 'hello');
+            JSONRooms = JSON.stringify(RoomArray);
+            console.log(JSONRooms + "\n" + ColorYEBR + "JSON array geprint!" + ColorRE);
+        }
+        else{
+            UserArray = NamesArray(Index, RoomArray);
+            UserID = UserIDArray(Index, RoomArray);
+            if(UserID.indexOf(socket.id)<0){
+                if(UserArray.indexOf(name)<0){
+                    addNames(Index, name);
+                    getNames(Index);
+                    console.log(ColorCYBR + Names + ColorRE + 'hello');
+                    // console.log(ColorGRBR + NamesArray(Index, RoomArray) + ColorRE);
+                    JSONRooms = JSON.stringify(RoomArray);
+                }else{
+                    console.log(ColorREBR + "Username already in use!" + ColorRE);
+                }
+            }
+            else{
+                console.log(ColorREBR + "you already have a name!" + ColorRE);
+            }
         }
         socket.join(room);
         console.log("User " + ColorWHBR + socket.id + ColorRE + " joined room: " + ColorGRBR + room + ColorRE + "\n");
@@ -157,9 +196,50 @@ io.on('connection', function(client) {
         client.broadcast.emit('choice',data, client.id);
     });
 });
+setInterval(heartbeat, 1000);
+function heartbeat() {
+    io.sockets.emit('heartbeat', 'tick');
+}
 
 function player(id,choice){
     this.id = id;
     this.choice = choice;
     this.status = "waiting";
+}
+
+var i,j,x = "";
+
+function getNames(index) {
+    Names = "";
+    for (i in RoomArray[index].Users){
+        Names += '{"Username" : ' + RoomArray[index].Users[i].Username + '}' ;
+    }
+}
+
+function NamesArray(index, rArray){
+    var testNames = "";
+    // var test = "";
+    var TestArray = [];
+    for(j in rArray[index].Users){
+        test = rArray[index].Users[j].Username;
+        TestArray.push(test);
+    }
+    // for(x in TestArray){
+    //     testNames += TestArray[x] + "\n";
+    // }
+    // return testNames;
+    return TestArray;
+}
+function UserIDArray(index, rArray) {
+    var IDArray = [];
+    for(x in rArray[index].Users){
+        ID = rArray[index].Users[x].UserID;
+        IDArray.push(ID);
+    }
+    return IDArray;
+}
+
+function addNames(index, name) {
+    console.log('{"Username" : ' + name + '}');
+    RoomArray[index].Users.push({"Username" : name});
 }
