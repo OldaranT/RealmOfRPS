@@ -128,6 +128,8 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('UpdateAmountOfPlayers', io.engine.clientsCount);
     });
 
+
+
     socket.on('Room', function (room, name) {
 
         RoomArray = JSON.parse(JSONRooms);
@@ -243,3 +245,4 @@ function addNames(index, name) {
     console.log('{"Username" : ' + name + '}');
     RoomArray[index].Users.push({"Username" : name});
 }
+
