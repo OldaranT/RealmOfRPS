@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var splashScreen = require('./routes/splashScreen');
 var register = require('./routes/register');
+var room = require('./routes/room');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/index', index);
 app.use('/users', users);
 app.use('/splashScreen', splashScreen);
 app.use('/register', register);
+app.use('/room', room);
 //server.listen(4200);
 
 // catch 404 and forward to error handler

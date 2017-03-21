@@ -2,8 +2,8 @@ $( document ).ready(function() {
 
 var conJordy =  'http://192.168.1.21:4200';
 var conTim =  'http://192.168.1.20:4200';
-var conNick = 'http://localhost:4200';
-var socket = io.connect(conTim);
+    var conNick =  'http://192.168.1.22:4200';
+var socket = io.connect(conNick);
 
 socket.on('connect', function(data) {
 
@@ -61,4 +61,24 @@ socket.on('choice', function(data, user_id) {
     $('body').append("keuze: " + data + " " + user_id + "<br>");
 });
 
+ListRooms();
+
 });
+
+function encodeQueryData(data) {
+    var ret = [];
+    var d = "";
+    for (d in data)
+        ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+    return ret.join('&');
+}
+
+var data = { 'firstname': 'George', 'lastname': 'Jetson', 'age': 110 };
+var querystring = encodeQueryData(data);
+
+function ListRooms() {
+    var i = "";
+    // for(i in RoomArray){
+        $('<li>Hello World</li>').appendTo('#RoomList');
+    // }
+}
