@@ -2,5 +2,8 @@
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+<<<<<<< HEAD
+=======
 HBSAppV1/public/javascripts/unusedJS.js
+>>>>>>> 99b26752028298c4ebcf16bcab8ee9c9cb0bb274
 HBSAppV1/public/json/data.json

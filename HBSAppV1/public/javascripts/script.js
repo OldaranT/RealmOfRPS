@@ -81,24 +81,19 @@ $( document ).ready(function() {
 
         socket.on('choice', function (data, user_id) {
             $('body').append("keuze: " + data + " " + user_id + "<br>");
-            /*Audio*/
-            var SuccesAudio = "../audio/162473-successful.mp3";
-            $('#image_rock,#image_paper,#image_scissor').click(function () {
-                new Audio(SuccesAudio).play();
-            });
-
-            /*Audio*/
-            var SuccesAudio = "../audio/162473-successful.mp3";
-            $('#image_rock,#image_paper,#image_scissor').click(function () {
-                var succesclick = new Audio(SuccesAudio)
-                succesclick.play();
-            });
-
-            var BackgroundMusic = "../audio/8bitBackgroundMusic.mp3";
-            var BGLoop = new Audio(BackgroundMusic);
-            BGLoop.loop = true;
-            BGLoop.play();
 
         });
     });
+
+
+/*========================Audio====================================================*/
+    var SuccesAudio = "../audio/162473-successful.mp3";
+    $('#image_rock,#image_paper,#image_scissor').click(function () {
+        new Audio(SuccesAudio).play();
+    });
+
+    var BackgroundMusic = "../audio/8bitBackgroundMusic.mp3";
+    var BGLoop = new Audio(BackgroundMusic);
+    BGLoop.loop = true;
+    BGLoop.play();
 });
