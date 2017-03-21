@@ -3,7 +3,7 @@ $( document ).ready(function() {
 var conJordy =  'http://192.168.1.21:4200';
 var conTim =  'http://192.168.1.20:4200';
 var conNick = 'http://localhost:4200';
-var socket = io.connect(conTim);
+var socket = io.connect(conJordy);
 
 socket.on('connect', function(data) {
 
