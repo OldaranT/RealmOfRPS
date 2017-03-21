@@ -49,6 +49,7 @@ body {
 
 #image_logo{
   padding-bottom: 40px;
+  width: 300px;
   animation: fadeIn 3s;
 }
 
@@ -372,7 +373,7 @@ article{
 .menu-item{
   height: 100px;
   width: 100px;
-}
+
 
 /*
    =============================================================================
@@ -402,8 +403,9 @@ article{
     display: inline-block;
     float: right;
   }
-  nav{
 
+  #image_logo{
+    width: 500px;
   }
 
   .main-nav li:hover{
