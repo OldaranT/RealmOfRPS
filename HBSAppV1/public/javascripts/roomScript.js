@@ -1,9 +1,30 @@
 /**
  * Created by nikro on 21-3-2017.
  */
-// $(document).ready(function () {
-    var conNick =  'http://192.168.1.22:4200';
-    var socket = io.connect(conNick);
+$(document).ready(function () {
+function loadJSON(callback) {
+
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("../json/");
+    xobj.open('GET', '../json/data.json', true);
+    xobj.onreadystatechange = function() {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+
+            // .open will NOT return a value but simply returns undefined in async mode so use a callback
+            callback(xobj.responseText);
+
+        }
+    }
+    xobj.send(null);
+
+}
+
+// Call to function with anonymous callback
+loadJSON(function(response) {
+    jsonresponse = JSON.parse(response);
+    var connection = jsonresponse.Connecten.ConnectString;
+
+    var socket = io.connect(connection);
     socket.on('connect', function () {
         socket.emit('adduser', prompt("What's your name: "));
     });
@@ -49,4 +70,5 @@
             socket.emit('create', name)
         });
     });
-// });
+})
+});
