@@ -66,8 +66,6 @@ socket.on('choice', function(data, user_id) {
 });
 
 
-ListRooms();
-
     /*Audio*/
     var SuccesAudio = "../audio/162473-successful.mp3";
     $('#image_rock,#image_paper,#image_scissor').click(function() {
@@ -76,21 +74,4 @@ ListRooms();
 
 });
 
-function encodeQueryData(data) {
-    var ret = [];
-    var d = "";
-    for (d in data)
-        ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
-    return ret.join('&');
-}
-
-var data = { 'firstname': 'George', 'lastname': 'Jetson', 'age': 110 };
-var querystring = encodeQueryData(data);
-
-function ListRooms() {
-    var i = "";
-    // for(i in RoomArray){
-        $('<li>Hello World</li>').appendTo('#RoomList');
-    // }
-}
 
