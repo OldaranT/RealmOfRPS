@@ -161,10 +161,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('joinGame', function(){
-        var data = [];
-        var message = 'hi';
-        var id = socket.id;
-        socket.emit('Joined', message);
+        socket.emit('Joined', socket.id, socket.username, socket.room);
     })
 });
 

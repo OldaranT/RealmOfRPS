@@ -69,8 +69,12 @@ $( document ).ready(function() {
         socket.emit('switchRoom', room);
     }
 
-    socket.on('Joined', function (m) {
-        alert(m);
+    socket.on('Joined', function (ID, name, room) {
+        player(ID, name, room);
+        alert(ID + ' ' + name);
+        var Roomurl = encodeQueryData(Player);
+        alert(Roomurl);
+        document.location.href = 'gameRoom?' + Roomurl;
     })
 
     $(function(){
@@ -100,4 +104,23 @@ $( document ).ready(function() {
 
     });
 
+    var Player;
+
+    function player(ID, name, room) {
+        var ID = ID;
+        var name = name;
+        var room = room;
+        var Status = null;
+        Player = {'ID' : ID, 'Name' : name, 'Room' : room, 'Status' : Status}
+    };
+
+    function encodeQueryData(data) {
+        var ret = [];
+        for (var d in data)
+            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return ret.join('&');
+    }
+
 });
+
+
