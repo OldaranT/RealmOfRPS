@@ -35,11 +35,18 @@ $( document ).ready(function() {
         })
     );
     socket.on('connect', function(){
-        socket.emit('adduser', prompt("What's your name: "));
+        // socket.emit('adduser', prompt("What's your name: "));
+        socket.emit('adduser', 'Oldaran');
     });
 
     socket.on('updatechat', function (username, data) {
-        $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+        if(data != null && data != ""){
+            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            var element = document.getElementById("conversation");
+            element.scrollTop = element.scrollHeight;
+        }else{
+            console.log('geen valide waarde');
+        }
     });
 
     var Room;
@@ -49,11 +56,11 @@ $( document ).ready(function() {
         $('#rooms').empty();
         $.each(rooms, function(key, value) {
             if(value == current_room){
-                $('#rooms').append('<div>' + value + '</div>');
-            }
-            else {
+                // $('#rooms').append('<div>' + value + '</div>');
+                $('<input>' + value).attr('class', 'room-button button1').attr('type', 'submit').attr('value', value ).appendTo($('#rooms'));
+            }else{
                 // $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
-                $('<div></div>').attr('id', value + 'div').appendTo($('#rooms'));
+                $('<input>').attr('id', value + 'div').attr('type', 'submit').attr('value', value ).attr('class', 'room-button button1').appendTo($('#rooms'));
                 $('<a>' + value + '</a>').attr('href', '#').attr('id', value).appendTo($('#' + value + 'div')).click(function () {
                     socket.emit('switchRoom', value);
                     console.log('switch');
@@ -89,8 +96,12 @@ $( document ).ready(function() {
 
         $('#roombutton').click(function(){
             var name = $('#roomname').val();
-            $('#roomname').val('');
-            socket.emit('create', name)
+            if(name != null && name != ""){
+                $('#roomname').val('');
+                socket.emit('create', name)
+            }else{
+                console.log('geen valide waarde');
+            }
         });
 
         $('#JoinGame').click(function () {

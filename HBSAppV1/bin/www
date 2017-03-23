@@ -133,8 +133,13 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('create', function(room) {
-        rooms.push(room);
-        socket.emit('updaterooms', rooms, socket.room);
+        if(rooms.indexOf(room) < 0){
+            rooms.push(room);
+            socket.emit('updaterooms', rooms, socket.room);
+        }else {
+            console.log(room.name);
+            console.log('Room Bestaat al.');
+        }
     });
 
     socket.on('sendchat', function(data) {
