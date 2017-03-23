@@ -154,7 +154,7 @@ $( document ).ready(function() {
 
         //Status updaten
         $('.status').fadeOut(500, function() {
-            $(this).html("<p>You've chosen: <Rock></Rock></p>").fadeIn(500);
+            $(this).html("<p>You've chosen: Rock</p>").fadeIn(500);
         });
     });
 
