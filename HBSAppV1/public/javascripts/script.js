@@ -65,19 +65,22 @@ $( document ).ready(function() {
         $('#image_scissor').click(function () {
             console.log("Schaar geklikt!")
             socket.emit('choice', "scissor");
-            $('.choices').addClass('hide');
+           // $('.choices img').not('#image_scissor').addClass('hide');
+            $('.choices img').not('#image_scissor').detach();
         });
 
         $('#image_paper').click(function () {
             console.log("Papier geklikt!")
             socket.emit('choice', "paper");
-            $('.choices').addClass('hide');
+           // $('.choices').addClass('hide');
+            $('.choices img').not('#image_paper').detach();
         });
 
         $('#image_rock').click(function () {
             console.log("Steen geklikt!")
             socket.emit('choice', "rock");
-            $('.choices').addClass('hide');
+            //$('.choices').addClass('hide');
+            $('.choices img').not('#image_rock').detach();
         });
 
         socket.on('choice', function (data, user_id) {
