@@ -69,6 +69,10 @@ $( document ).ready(function() {
         socket.emit('switchRoom', room);
     }
 
+    socket.on('Joined', function (m) {
+        alert(m);
+    })
+
     $(function(){
         $('#datasend').click( function() {
             var message = $('#data').val();
@@ -89,9 +93,11 @@ $( document ).ready(function() {
             socket.emit('create', name)
         });
 
-        $('#joinButton').click(function () {
-
+        $('#JoinGame').click(function () {
+            console.log('clicked');
+            socket.emit('joinGame');
         })
+
     });
 
 });

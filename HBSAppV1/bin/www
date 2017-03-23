@@ -159,6 +159,13 @@ io.sockets.on('connection', function(socket) {
         socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
         socket.leave(socket.room);
     });
+
+    socket.on('joinGame', function(){
+        var data = [];
+        var message = 'hi';
+        var id = socket.id;
+        socket.emit('Joined', message);
+    })
 });
 
 io.on('connection', function(client) {
