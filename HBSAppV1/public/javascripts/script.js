@@ -63,10 +63,7 @@ $( document ).ready(function() {
 
 // Added since first release
 
-        socket.on('choice', function (data, user_id) {
-            $('body').append("keuze: " + data + " " + user_id + "<br>");
 
-        });
     });
 
 

@@ -99,6 +99,8 @@ $( document ).ready(function() {
     BGLoop.loop = true;
     BGLoop.play();
 
+/*========================Gme inputs====================================================*/
+
     $('#image_scissor').click(function () {
         console.log("Schaar geklikt!")
         socket.emit('choice', "scissor");
@@ -112,9 +114,11 @@ $( document ).ready(function() {
             $(this).addClass('hide');
         });
 
+        //Status updaten
+        $('.status').fadeOut(500, function() {
+            $(this).html("<p>You've chosen: Scissors</p>").fadeIn(500);
+        });
     });
-
-/*========================Gme inputs====================================================*/
 
     $('#image_paper').click(function () {
         console.log("Papier geklikt!")
@@ -127,6 +131,11 @@ $( document ).ready(function() {
         }, 500, function() {
 
             $(this).addClass('hide');
+        });
+
+        //Status updaten
+        $('.status').fadeOut(500, function() {
+            $(this).html("<p>You've chosen: Paper</p>").fadeIn(500);
         });
     });
 
@@ -142,6 +151,18 @@ $( document ).ready(function() {
 
             $(this).addClass('hide');
         });
+
+        //Status updaten
+        $('.status').fadeOut(500, function() {
+            $(this).html("<p>You've chosen: <Rock></Rock></p>").fadeIn(500);
+        });
     });
+
+    /*========================Server response====================================================*/
+    socket.on('results', function (data, user_id) {
+        $('.status').append("<p>You've</p>");
+
+    });
+
 });
 
