@@ -62,6 +62,7 @@ $( document ).ready(function() {
                 $('<input>').attr('id', value + 'div').attr('type', 'submit').attr('value', value )
                     .attr('class', 'room-button button1').appendTo($('#rooms')).click(function () {
                     socket.emit('switchRoom', value);
+                    $('#chat-name').html("<b>CHAT: " + value + "</b>");
                     console.log('switch');
                     $('#conversation').html('');
                 });
@@ -149,6 +150,17 @@ $( document ).ready(function() {
         }
         return parms;
     }
+
+    /*========================Audio====================================================*/
+    var SuccesAudio = "../audio/162473-successful.mp3";
+    $('#image_rock,#image_paper,#image_scissor').click(function () {
+        new Audio(SuccesAudio).play();
+    });
+
+    var BackgroundMusic = "../audio/8bitBackgroundMusic.mp3";
+    var BGLoop = new Audio(BackgroundMusic);
+    BGLoop.loop = true;
+    BGLoop.play();
 
 });
 

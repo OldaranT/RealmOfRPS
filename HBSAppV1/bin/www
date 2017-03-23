@@ -138,8 +138,8 @@ io.sockets.on('connection', function(socket) {
         if(rooms.indexOf(room) < 0){
             rooms.push(room);
             socket.emit('updaterooms', rooms, socket.room);
+            socket.broadcast.emit('updaterooms', rooms, socket.room);
         }else {
-            console.log(room.name);
             console.log('Room Bestaat al.');
         }
     });
