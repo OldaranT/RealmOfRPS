@@ -35,8 +35,10 @@ $( document ).ready(function() {
         })
     );
     socket.on('connect', function(){
-        // socket.emit('adduser', prompt("What's your name: "));
-        socket.emit('adduser', 'Oldaran');
+        var url = window.location.href;
+        var params = parseURLParams(url);
+
+        socket.emit('adduser', params.name);
     });
 
     socket.on('updatechat', function (username, data) {
@@ -50,18 +52,15 @@ $( document ).ready(function() {
     });
 
     var Room;
-
     socket.on('updaterooms', function (rooms, current_room) {
         Room = current_room;
         $('#rooms').empty();
         $.each(rooms, function(key, value) {
             if(value == current_room){
-                // $('#rooms').append('<div>' + value + '</div>');
                 $('<input>' + value).attr('class', 'room-button button1').attr('type', 'submit').attr('value', value ).appendTo($('#rooms'));
             }else{
-                // $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
-                $('<input>').attr('id', value + 'div').attr('type', 'submit').attr('value', value ).attr('class', 'room-button button1').appendTo($('#rooms'));
-                $('<a>' + value + '</a>').attr('href', '#').attr('id', value).appendTo($('#' + value + 'div')).click(function () {
+                $('<input>').attr('id', value + 'div').attr('type', 'submit').attr('value', value )
+                    .attr('class', 'room-button button1').appendTo($('#rooms')).click(function () {
                     socket.emit('switchRoom', value);
                     console.log('switch');
                     $('#conversation').html('');
@@ -69,15 +68,18 @@ $( document ).ready(function() {
             }
         });
     });
-    // var socket = io.connect('http://192.168.1.22')
 
 
     function switchRoom(room){
         socket.emit('switchRoom', room);
     }
 
-    socket.on('Joined', function (m) {
-        alert(m);
+    socket.on('Joined', function (ID, name, room) {
+        player(ID, name, room);
+        alert(ID + ' ' + name);
+        var Roomurl = encodeQueryData(Player);
+        alert(Roomurl);
+        document.location.href = 'gameRoom?' + Roomurl;
     })
 
     $(function(){
@@ -111,4 +113,43 @@ $( document ).ready(function() {
 
     });
 
+    var Player;
+
+    function player(ID, name, room) {
+        var ID = ID;
+        var name = name;
+        var room = room;
+        var Status = null;
+        Player = {'ID' : ID, 'Name' : name, 'Room' : room, 'Status' : Status}
+    };
+
+    function encodeQueryData(data) {
+        var ret = [];
+        for (var d in data)
+            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return ret.join('&');
+    }
+
+    function parseURLParams(url) {
+        var queryStart = url.indexOf("?") + 1,
+            queryEnd   = url.indexOf("#") + 1 || url.length + 1,
+            query = url.slice(queryStart, queryEnd - 1),
+            pairs = query.replace(/\+/g, " ").split("&"),
+            parms = {}, i, n, v, nv;
+
+        if (query === url || query === "") return;
+
+        for (i = 0; i < pairs.length; i++) {
+            nv = pairs[i].split("=", 2);
+            n = decodeURIComponent(nv[0]);
+            v = decodeURIComponent(nv[1]);
+
+            if (!parms.hasOwnProperty(n)) parms[n] = [];
+            parms[n].push(nv.length === 2 ? v : null);
+        }
+        return parms;
+    }
+
 });
+
+

@@ -122,9 +122,11 @@ var usernames = {};
 var rooms = ['Lobby'];
 
 io.sockets.on('connection', function(socket) {
+
     socket.on('adduser', function(username) {
         socket.username = username;
         socket.room = 'Lobby';
+        socket.status = null;
         usernames[username] = username;
         socket.join('Lobby');
         socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
@@ -141,6 +143,22 @@ io.sockets.on('connection', function(socket) {
             console.log('Room Bestaat al.');
         }
     });
+
+    socket.on('users', function () {
+
+        var array = [];
+        var string = '';
+        var clients_in_the_room = io.sockets.adapter.rooms[socket.room];
+        for (var clientId in clients_in_the_room['sockets'] ) {
+            // console.log('client: %s', clientId); //Seeing is believing
+            var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
+            array.push(client_socket['username']);
+        }
+        for (var s in array){
+            string += array[s] + "\n" + s + "\n";
+        }
+        console.log(string);
+    })
 
     socket.on('sendchat', function(data) {
         io.sockets["in"](socket.room).emit('updatechat', socket.username, data);
@@ -166,10 +184,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('joinGame', function(){
-        var data = [];
-        var message = 'hi';
-        var id = socket.id;
-        socket.emit('Joined', message);
+        socket.emit('Joined', socket.id, socket.username, socket.room);
     })
 });
 
@@ -195,6 +210,40 @@ function player(id,choice){
     this.id = id;
     this.choice = choice;
     this.status = "waiting";
+}
+
+function getRoomUsers(roomName) {
+    var room = io.sockets.adapter.rooms[roomName];
+    var string;
+    for (var u in room){
+        string += u + " " + room[u] + "\n";
+    }
+    return string;
+}
+
+function findClientsSocket(roomId, namespace) {
+    var res = []
+        // the default namespace is "/"
+        , ns = io.of(namespace ||"/");
+    var string;
+
+    if (ns) {
+        for (var id in ns.connected) {
+            if(roomId) {
+                var index = ns.connected[id].rooms.indexOf(roomId);
+                if(index !== -1) {
+                    res.push(ns.connected[id]);
+                }
+            } else {
+                res.push(ns.connected[id]);
+            }
+        }
+    }
+
+    for(var s in res){
+        string += s + " " + res[s] + "\n";
+    }
+    return string;
 }
 
 

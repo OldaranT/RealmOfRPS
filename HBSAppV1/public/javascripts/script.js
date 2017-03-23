@@ -62,28 +62,8 @@ $( document ).ready(function() {
         });
 
 // Added since first release
-        $('#image_scissor').click(function () {
-            console.log("Schaar geklikt!")
-            socket.emit('choice', "scissor");
-            $('.choices').addClass('hide');
-        });
 
-        $('#image_paper').click(function () {
-            console.log("Papier geklikt!")
-            socket.emit('choice', "paper");
-            $('.choices').addClass('hide');
-        });
 
-        $('#image_rock').click(function () {
-            console.log("Steen geklikt!")
-            socket.emit('choice', "rock");
-            $('.choices').addClass('hide');
-        });
-
-        socket.on('choice', function (data, user_id) {
-            $('body').append("keuze: " + data + " " + user_id + "<br>");
-
-        });
     });
 
 
