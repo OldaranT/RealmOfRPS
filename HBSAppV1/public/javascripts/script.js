@@ -97,4 +97,15 @@ $( document ).ready(function() {
     var BGLoop = new Audio(BackgroundMusic);
     BGLoop.loop = true;
     BGLoop.play();
+
+    /*========================Register Page=========================================*/
+    $('#UsernameplayButton').click(function () {
+        if ($('#userNameInput').val() != null && $('#userNameInput').val() != "" ){
+            console.log($('#userNameInput').val())
+            console.log(jsonresponse.Connecten.ConnectString);
+            window.location.href = jsonresponse.Connecten.ConnectString + "/room?name=" + $('#userNameInput').val();
+        } else {
+            console.log("Geen valide waarde")
+        }
+    });
 });
