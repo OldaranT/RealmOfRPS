@@ -2,6 +2,9 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$/HBSAppV1" libraries="{RealmOfRPS/HBSAppV1/node_modules}" />
-    <file url="PROJECT" libraries="{RealmOfRPS/HBSAppV1/node_modules, jquery-DefinitelyTyped}" />
+    <file url="PROJECT" libraries="{RealmOfRPS/HBSAppV1/node_modules, jquery-DefinitelyTyped, json-socket-DefinitelyTyped, sails.io.js-DefinitelyTyped, socket.io-DefinitelyTyped, socket.io-client-DefinitelyTyped, socket.io-parser-DefinitelyTyped, socket.io-redis-DefinitelyTyped, socket.io.users-DefinitelyTyped, websocket-DefinitelyTyped}" />
+    <includedPredefinedLibrary name="ECMAScript 6" />
+    <includedPredefinedLibrary name="Node.js Core" />
+    <includedPredefinedLibrary name="WebGL" />
   </component>
 </project>

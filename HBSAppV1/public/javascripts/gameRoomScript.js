@@ -44,7 +44,16 @@ $( document ).ready(function() {
         params = parseURLParams(url);
         room = params.Room;
         setTitle(room);
+        socket.emit('gameRoomJoin', params.Name, room);
+        socket.emit('users');
     });
+
+    socket.on('Players', function (arrayN, arrayS) {
+        $("#Players").html('');
+        for(var p in arrayN){
+            $("<p>" + arrayN[p] + " " + arrayS[p] + "</p>").appendTo($("#Players"));
+        }
+    })
 
     $('#button').click(function(){
         console.log('button');

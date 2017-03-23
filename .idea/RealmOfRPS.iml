@@ -15,5 +15,13 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="jquery-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="socket.io-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="socket.io-client-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="socket.io-parser-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="socket.io.users-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="json-socket-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="socket.io-redis-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="websocket-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="sails.io.js-DefinitelyTyped" level="application" />
   </component>
 </module>

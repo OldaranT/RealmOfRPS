@@ -121,6 +121,9 @@ var usernames = {};
 
 var rooms = ['Lobby'];
 
+var arrayN = [];
+var arrayS = [];
+
 io.sockets.on('connection', function(socket) {
 
     socket.on('adduser', function(username) {
@@ -141,18 +144,33 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('users', function () {
 
-        var array = [];
+        arrayN = [];
+        arrayS = [];
         var string = '';
         var clients_in_the_room = io.sockets.adapter.rooms[socket.room];
         for (var clientId in clients_in_the_room['sockets'] ) {
             // console.log('client: %s', clientId); //Seeing is believing
             var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
-            array.push(client_socket['username']);
+            arrayN.push(client_socket['username']);
+            arrayS.push(client_socket['status']);
         }
-        for (var s in array){
-            string += array[s] + "\n" + s + "\n";
+        for (var s in arrayN){
+            string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
         }
         console.log(string);
+
+        socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+
+        // socket.broadcast.to(socket.room).emit('Players', arrayN, arrayS);
+    });
+    
+    socket.on('gameRoomJoin', function (username, room) {
+        socket.username = username;
+        socket.room = room;
+        socket.status = null;
+        usernames[username] = username;
+        socket.join(room);
+        socket.broadcast.to(room).emit('updateRoom');
     })
 
     socket.on('sendchat', function(data) {
@@ -172,6 +190,8 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('disconnect', function() {
+        removePlayer(socket.username);
+        socket.broadcast.to(socket.room).emit('Players', arrayN, arrayS);
         delete usernames[socket.username];
         io.sockets.emit('updateusers', usernames);
         socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
@@ -239,6 +259,12 @@ function findClientsSocket(roomId, namespace) {
         string += s + " " + res[s] + "\n";
     }
     return string;
+}
+
+function removePlayer(username) {
+    var i = arrayN.indexOf(username);
+    arrayN.splice(i, 1);
+    arrayS.splice(i, 1);
 }
 
 
