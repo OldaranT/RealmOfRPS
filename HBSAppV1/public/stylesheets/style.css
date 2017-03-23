@@ -1,8 +1,6 @@
-
 .hide {
   display: none;
 }
-
 
 /*
    =============================================================================
@@ -49,11 +47,11 @@ body {
 
 #image_logo{
   padding-bottom: 40px;
-  animation: fadeIn 3s;
+  animation: tada 3s;
 }
 
 .inputUserName {
-  animation: fadeInLater 3s;
+  animation: fadeInLater 3.5s;
 }
 
 #splashImage_scissor{
@@ -122,14 +120,35 @@ body {
   }
 }
 
-@keyframes fadeIn {
-  0% {
+@keyframes tada {
+  from {
+    opacity: 0.0;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  70%{
     opacity: 0.0;
   }
-  70% {
-    opacity: 0.0;
+
+  50%, 70% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
   }
-  100% {
+
+  50%, 70%, 90%, 95% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  46%, 80%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
     opacity: 1.0;
   }
 }

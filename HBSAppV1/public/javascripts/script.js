@@ -66,21 +66,43 @@ $( document ).ready(function() {
             console.log("Schaar geklikt!")
             socket.emit('choice', "scissor");
            // $('.choices img').not('#image_scissor').addClass('hide');
-            $('.choices img').not('#image_scissor').detach();
+            $('.choices img').not('#image_scissor').animate({
+                padding: "0px",
+                'margin-left':'-10px',
+                'height': "0px"
+            }, 500, function() {
+
+                $(this).addClass('hide');
+            });
+
         });
 
         $('#image_paper').click(function () {
             console.log("Papier geklikt!")
             socket.emit('choice', "paper");
            // $('.choices').addClass('hide');
-            $('.choices img').not('#image_paper').detach();
+            $('.choices img').not('#image_paper').animate({
+                padding: "0px",
+                'margin-left':'-10px',
+                'height': "0px"
+            }, 500, function() {
+
+                $(this).addClass('hide');
+            });
         });
 
         $('#image_rock').click(function () {
             console.log("Steen geklikt!")
             socket.emit('choice', "rock");
             //$('.choices').addClass('hide');
-            $('.choices img').not('#image_rock').detach();
+            $('.choices img').not('#image_rock').animate({
+                padding: "0px",
+                'margin-left':'-10px',
+                'height': "0px"
+            }, 500, function() {
+
+                $(this).addClass('hide');
+            });
         });
 
         socket.on('choice', function (data, user_id) {
