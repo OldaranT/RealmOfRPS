@@ -99,7 +99,7 @@ $( document ).ready(function() {
     BGLoop.loop = true;
     BGLoop.play();
 
-/*========================Gme inputs====================================================*/
+/*========================Game inputs====================================================*/
 
     $('#image_scissor').click(function () {
         console.log("Schaar geklikt!")
