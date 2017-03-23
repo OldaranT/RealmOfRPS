@@ -87,4 +87,61 @@ $( document ).ready(function() {
     function setTitle(title) {
         $('#title').html('Welcome to room: ' + title);
     }
+
+/*========================Audio====================================================*/
+    var SuccesAudio = "../audio/162473-successful.mp3";
+    $('#image_rock,#image_paper,#image_scissor').click(function () {
+        new Audio(SuccesAudio).play();
+    });
+
+    var BackgroundMusic = "../audio/8bitBackgroundMusic.mp3";
+    var BGLoop = new Audio(BackgroundMusic);
+    BGLoop.loop = true;
+    BGLoop.play();
+
+    $('#image_scissor').click(function () {
+        console.log("Schaar geklikt!")
+        socket.emit('choice', "scissor");
+        // $('.choices img').not('#image_scissor').addClass('hide');
+        $('.choices img').not('#image_scissor').animate({
+            padding: "0px",
+            'margin-left':'-10px',
+            'height': "0px"
+        }, 500, function() {
+
+            $(this).addClass('hide');
+        });
+
+    });
+
+/*========================Gme inputs====================================================*/
+
+    $('#image_paper').click(function () {
+        console.log("Papier geklikt!")
+        socket.emit('choice', "paper");
+        // $('.choices').addClass('hide');
+        $('.choices img').not('#image_paper').animate({
+            padding: "0px",
+            'margin-left':'-10px',
+            'height': "0px"
+        }, 500, function() {
+
+            $(this).addClass('hide');
+        });
+    });
+
+    $('#image_rock').click(function () {
+        console.log("Steen geklikt!")
+        socket.emit('choice', "rock");
+        //$('.choices').addClass('hide');
+        $('.choices img').not('#image_rock').animate({
+            padding: "0px",
+            'margin-left':'-10px',
+            'height': "0px"
+        }, 500, function() {
+
+            $(this).addClass('hide');
+        });
+    });
 });
+
