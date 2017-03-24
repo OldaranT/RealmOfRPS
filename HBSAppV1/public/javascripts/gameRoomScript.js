@@ -111,7 +111,8 @@ $( document ).ready(function() {
         $('.choices img').not('#image_scissor').animate({
             padding: "0px",
             'margin-left':'-10px',
-            'height': "0px"
+            'height': "0px",
+            'width': "0px"
         }, 500, function() {
 
             $(this).addClass('hide');
@@ -119,7 +120,7 @@ $( document ).ready(function() {
 
         //Status updaten
         $('.status').fadeOut(500, function() {
-            $(this).html("<p>You've chosen: Scissors</p>").fadeIn(500);
+            $(this).html("<b>You've chosen: Scissors</b>").fadeIn(500);
         });
     });
 
@@ -130,7 +131,8 @@ $( document ).ready(function() {
         $('.choices img').not('#image_paper').animate({
             padding: "0px",
             'margin-left':'-10px',
-            'height': "0px"
+            'height': "0px",
+            'width': "0px"
         }, 500, function() {
 
             $(this).addClass('hide');
@@ -138,7 +140,7 @@ $( document ).ready(function() {
 
         //Status updaten
         $('.status').fadeOut(500, function() {
-            $(this).html("<p>You've chosen: Paper</p>").fadeIn(500);
+            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
         });
     });
 
@@ -149,15 +151,17 @@ $( document ).ready(function() {
         $('.choices img').not('#image_rock').animate({
             padding: "0px",
             'margin-left':'-10px',
-            'height': "0px"
+            'height': "0px",
+            'width': "0px"
         }, 500, function() {
 
-            $(this).addClass('hide');
+            //$(this).addClass('hide');
+            $(this).remove();
         });
 
         //Status updaten
         $('.status').fadeOut(500, function() {
-            $(this).html("<p>You've chosen: Rock</p>").fadeIn(500);
+            $(this).html("<b>You've chosen: Rock</b>").fadeIn(500);
         });
     });
 
