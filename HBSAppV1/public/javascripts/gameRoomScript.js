@@ -36,18 +36,24 @@ $( document ).ready(function() {
         // alert(url);
         params = parseURLParams(url);
         room = params.Room;
+
         setTitle(room);
         socket.emit('gameRoomJoin', params.Name, room);
-        socket.emit('users', params.Name);
+        socket.emit('users');
+        socket.emit('gameReadyCheck');
     });
 
     socket.on('Players', function (arrayN, arrayS) {
-
         $("#Players").html('');
         for(var p in arrayN){
-            $("<p>" + arrayN[p] + " " + arrayS[p] + "</p>").appendTo($("#Players"));
+            if(arrayS[p] == 0){
+                $("<p>" + arrayN[p] + ": Heeft nog niet gekozen" + "</p>").appendTo($("#Players"));
+            }
+            else if(arrayS[p] == 1){
+                $("<p>" + arrayN[p] + ": Heeft gekozen" + "</p>").appendTo($("#Players"));
+            }
         }
-    })
+    });
 
     $('#button').click(function(){
         console.log('button');
@@ -102,90 +108,6 @@ $( document ).ready(function() {
     BGLoop.loop = true;
     BGLoop.play();
 
-/*========================Game inputs====================================================*/
-
-    $('#image_scissor').click(function () {
-        $(this).unbind( "click" );
-        console.log("Schaar geklikt!")
-        socket.emit('choice', "scissor");
-        // $('.choices img').not('#image_scissor').addClass('hide');
-        $('.choices img').not('#image_scissor').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            $(this).addClass('hide');
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Scissors</b>").fadeIn(500);
-        });
-        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
-        i = 0;
-        setInterval(function() {
-            i = ++i % 4;
-            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
-        }, 500);
-    });
-
-    $('#image_paper').click(function () {
-        $(this).unbind( "click" );
-        console.log("Papier geklikt!")
-        socket.emit('choice', "paper");
-        // $('.choices').addClass('hide');
-        $('.choices img').not('#image_paper').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            $(this).addClass('hide');
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
-        });
-        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
-        i = 0;
-        setInterval(function() {
-            i = ++i % 4;
-            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
-        }, 500);
-    });
-
-    $('#image_rock').click(function () {
-        $(this).unbind( "click" );
-        console.log("Steen geklikt!")
-        socket.emit('choice', "rock");
-        //$('.choices').addClass('hide');
-        $('.choices img').not('#image_rock').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            //$(this).addClass('hide');
-            $(this).remove();
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Rock</b>").fadeIn(500);
-        });
-        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
-        i = 0;
-        setInterval(function() {
-            i = ++i % 4;
-            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
-        }, 500);
-    });
-
     /*========================Server response====================================================*/
     socket.on('results', function (data, user_id) {
         $('.status').append("<p>You've</p>");
@@ -210,6 +132,70 @@ $( document ).ready(function() {
         socket.emit('sendchat', message);
     });
 
+    socket.on('GameReady', function (moreThanTwoPlayers) {
+        if (moreThanTwoPlayers){
+            console.log("Room ready");
+            $('#image_rock').bind('click', function(){
+                ChoiceClickFunction('rock');
+            });
+            $('#image_scissor').bind('click', function(){
+                ChoiceClickFunction('scissor');
+            });
+            $('#image_paper').bind('click', function(){
+                ChoiceClickFunction('paper');
+            });
+        } else {
+            console.log("Room not ready");
+            $('#image_rock').unbind( "click" );
+            $('#image_scissor').unbind( "click" );
+            $('#image_paper').unbind( "click" );
+        }
+    });
+
+    /*============================================Function==========================================*/
+    function OnClickUpdate(choice) {
+        socket.emit('choice', choice);
+        socket.emit('updateUsers', 1, choice);
+        socket.emit('users');
+        socket.emit('gameStatus');
+    }
+
+    function ChoiceClickFunction(choice) {
+        $('#image_' + choice).unbind( "click" );
+        console.log(choice + " geklikt!");
+        var RPS = null;
+        if (choice == 'scissor'){
+            RPS = 1;
+        } else if (choice == 'paper'){
+            RPS = 2;
+        } else {
+            RPS = 3;
+        }
+
+        OnClickUpdate(RPS);
+
+        $('.choices img').not('#image_' + choice).animate({
+            padding: "0px",
+            'margin-left':'-10px',
+            'height': "0px",
+            'width': "0px"
+        }, 500, function() {
+
+            $(this).addClass('hide');
+        });
+
+        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
+        i = 0;
+        setInterval(function() {
+            i = ++i % 4;
+            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
+        }, 500);
+
+
+        //Status updaten
+        $('.status').fadeOut(500, function() {
+            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
+        });
+    };
+
 });
-
-

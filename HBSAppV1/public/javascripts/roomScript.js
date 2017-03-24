@@ -77,9 +77,7 @@ $( document ).ready(function() {
 
     socket.on('Joined', function (ID, name, room) {
         player(ID, name, room);
-        alert(ID + ' ' + name);
         var Roomurl = encodeQueryData(Player);
-        alert(Roomurl);
         document.location.href = 'gameRoom?' + Roomurl;
     })
 
