@@ -1,6 +1,3 @@
-/**
- * Created by nikro on 23-3-2017.
- */
 $( document ).ready(function() {
 
     function loadJSON(callback) {
@@ -27,11 +24,6 @@ $( document ).ready(function() {
 
             return connection;
 
-            // var socket = io.connect(connection);
-
-            // return socket;
-
-
         })
     );
     var url;
@@ -41,10 +33,21 @@ $( document ).ready(function() {
     var player;
     socket.on('connect', function (data) {
         url = window.location.href;
+        // alert(url);
         params = parseURLParams(url);
         room = params.Room;
         setTitle(room);
+        socket.emit('gameRoomJoin', params.Name, room);
+        socket.emit('users', params.Name);
     });
+
+    socket.on('Players', function (arrayN, arrayS) {
+
+        $("#Players").html('');
+        for(var p in arrayN){
+            $("<p>" + arrayN[p] + " " + arrayS[p] + "</p>").appendTo($("#Players"));
+        }
+    })
 
     $('#button').click(function(){
         console.log('button');

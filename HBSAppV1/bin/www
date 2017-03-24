@@ -118,8 +118,15 @@ io.sockets.on('connection', function (socket) {
 });
 
 var usernames = {};
+var temp = '';
+var temp2 = '';
+var toRemove;
+var redirect = false;
 
 var rooms = ['Lobby'];
+
+var arrayN = [];
+var arrayS = [];
 
 io.sockets.on('connection', function(socket) {
 
@@ -144,20 +151,42 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
-    socket.on('users', function () {
+    socket.on('users', function (name) {
 
-        var array = [];
+        console.log(name);
+        arrayN = [];
+        arrayS = [];
         var string = '';
         var clients_in_the_room = io.sockets.adapter.rooms[socket.room];
+
         for (var clientId in clients_in_the_room['sockets'] ) {
             // console.log('client: %s', clientId); //Seeing is believing
             var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
-            array.push(client_socket['username']);
+            arrayN.push(client_socket['username']);
+            arrayS.push(client_socket['status']);
         }
-        for (var s in array){
-            string += array[s] + "\n" + s + "\n";
+        for (var s in arrayN){
+            string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
         }
         console.log(string);
+
+            socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+    });
+
+    socket.on('gameRoomJoin', function (username, room) {
+
+        if (arrayN.indexOf(username) < 0){
+            console.log(arrayN.indexOf(username));
+            console.log(arrayN[0]);
+        }else{
+            console.log('say hi')
+        }
+        socket.username = username;
+        socket.room = room;
+        socket.status = null;
+        usernames[username] = username;
+        socket.join(room);
+        socket.broadcast.to(room).emit('updateRoom');
     })
 
     socket.on('sendchat', function(data) {
