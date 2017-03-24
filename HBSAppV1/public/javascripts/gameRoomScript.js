@@ -36,18 +36,23 @@ $( document ).ready(function() {
         // alert(url);
         params = parseURLParams(url);
         room = params.Room;
+
         setTitle(room);
         socket.emit('gameRoomJoin', params.Name, room);
-        socket.emit('users', params.Name);
+        socket.emit('users');
     });
 
     socket.on('Players', function (arrayN, arrayS) {
-
         $("#Players").html('');
         for(var p in arrayN){
-            $("<p>" + arrayN[p] + " " + arrayS[p] + "</p>").appendTo($("#Players"));
+            if(arrayS[p] == 0){
+                $("<p>" + arrayN[p] + ": Heeft nog niet gekozen" + "</p>").appendTo($("#Players"));
+            }
+            else if(arrayS[p] == 1){
+                $("<p>" + arrayN[p] + ": Heeft gekozen" + "</p>").appendTo($("#Players"));
+            }
         }
-    })
+    });
 
     $('#button').click(function(){
         console.log('button');
@@ -105,8 +110,8 @@ $( document ).ready(function() {
 /*========================Game inputs====================================================*/
 
     $('#image_scissor').click(function () {
-        console.log("Schaar geklikt!")
-        socket.emit('choice', "scissor");
+        console.log("Schaar geklikt!");
+        OnClickUpdate(1);
         // $('.choices img').not('#image_scissor').addClass('hide');
         $('.choices img').not('#image_scissor').animate({
             padding: "0px",
@@ -122,11 +127,12 @@ $( document ).ready(function() {
         $('.status').fadeOut(500, function() {
             $(this).html("<b>You've chosen: Scissors</b>").fadeIn(500);
         });
+
     });
 
     $('#image_paper').click(function () {
-        console.log("Papier geklikt!")
-        socket.emit('choice', "paper");
+        console.log("Papier geklikt!");
+        OnClickUpdate(2);
         // $('.choices').addClass('hide');
         $('.choices img').not('#image_paper').animate({
             padding: "0px",
@@ -145,8 +151,8 @@ $( document ).ready(function() {
     });
 
     $('#image_rock').click(function () {
-        console.log("Steen geklikt!")
-        socket.emit('choice', "rock");
+        console.log("Steen geklikt!");
+        OnClickUpdate(3);
         //$('.choices').addClass('hide');
         $('.choices img').not('#image_rock').animate({
             padding: "0px",
@@ -164,6 +170,13 @@ $( document ).ready(function() {
             $(this).html("<b>You've chosen: Rock</b>").fadeIn(500);
         });
     });
+
+    function OnClickUpdate(choice) {
+        socket.emit('choice', choice);
+        socket.emit('updateUsers', 1, choice);
+        socket.emit('users');
+        socket.emit('gameStatus');
+    }
 
     /*========================Server response====================================================*/
     socket.on('results', function (data, user_id) {
