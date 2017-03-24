@@ -89,6 +89,12 @@ $( document ).ready(function() {
         $('#title').html('Welcome to room: ' + title);
     }
 
+    $(function(){
+        $('#lobbyReturn').click( function() {
+            document.location.href = 'room?name='+ params.Name;
+        });
+    });
+
 /*========================Audio====================================================*/
     var SuccesAudio = "../audio/162473-successful.mp3";
     $('#image_rock,#image_paper,#image_scissor').click(function () {
@@ -122,16 +128,17 @@ $( document ).ready(function() {
         }
         $('.choices, #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
 
-        socket.on('GameWinner', function (gameWinner) {
-            if(gameWinner == null){
-                $('#winner').html('<b>Result: Het is gelijk spel. </b>');
-                console.log(gameWinner);
-            }else{
-                $('#winner').html('<b>Result: De winnaar is ' + gameWinner + '</b>');
-                console.log(gameWinner);
-            }
-        });
+    });
 
+    socket.on('GameWinner', function (gameWinner) {
+        console.log(gameWinner);
+        if(gameWinner == null){
+            $('#winner').html('<b>Result: Het is gelijk spel. </b>');
+            console.log(gameWinner);
+        }else{
+            $('#winner').html('<b>Result: De winnaar is ' + gameWinner + '</b>');
+            console.log(gameWinner);
+        }
     });
 
     /*========================Server response====================================================*/

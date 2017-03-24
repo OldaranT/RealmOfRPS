@@ -66,8 +66,7 @@ $( document ).ready(function() {
 
     });
 
-
-
+    $('#userNameInput').focus();
     $('#userNameInput').keypress(function(e) {
         if(e.which == 13) {
             $(this).blur();

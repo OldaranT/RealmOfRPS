@@ -275,7 +275,7 @@ article{
   padding: 5%;
 
   width: 100%;
-  height: 200px;
+  height: 300px;
   overflow-y: scroll;
   /*padding-right: 17px;*/
 }
@@ -406,6 +406,20 @@ article{
 }
 
 .button4:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+.button5 {
+  background-color: white;
+  color: #4CAF50;
+  width: 100%;
+  float: right;
+  border: 2px solid #4CAF50;
+}
+
+.button5:hover {
   background-color: #4CAF50;
   color: white;
 }
