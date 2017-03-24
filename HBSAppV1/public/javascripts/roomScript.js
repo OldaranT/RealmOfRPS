@@ -42,30 +42,33 @@ $( document ).ready(function() {
     });
 
     socket.on('updatechat', function (username, data) {
-        $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+        if(data != null && data != ""){
+            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            var element = document.getElementById("conversation");
+            element.scrollTop = element.scrollHeight;
+        }else{
+            console.log('geen valide waarde');
+        }
     });
 
     var Room;
-
     socket.on('updaterooms', function (rooms, current_room) {
         Room = current_room;
         $('#rooms').empty();
         $.each(rooms, function(key, value) {
             if(value == current_room){
-                $('#rooms').append('<div>' + value + '</div>');
-            }
-            else {
-                // $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
-                $('<div></div>').attr('id', value + 'div').appendTo($('#rooms'));
-                $('<a>' + value + '</a>').attr('href', '#').attr('id', value).appendTo($('#' + value + 'div')).click(function () {
+                $('<input>' + value).attr('class', 'room-button button1').attr('type', 'submit').attr('value', value ).appendTo($('#rooms'));
+            }else{
+                $('<input>').attr('id', value + 'div').attr('type', 'submit').attr('value', value )
+                    .attr('class', 'room-button button1').appendTo($('#rooms')).click(function () {
                     socket.emit('switchRoom', value);
+                    $('#chat-name').html("<b>CHAT: " + value + "</b>");
                     console.log('switch');
                     $('#conversation').html('');
                 });
             }
         });
     });
-    // var socket = io.connect('http://192.168.1.22')
 
 
     function switchRoom(room){
@@ -96,8 +99,12 @@ $( document ).ready(function() {
 
         $('#roombutton').click(function(){
             var name = $('#roomname').val();
-            $('#roomname').val('');
-            socket.emit('create', name)
+            if(name != null && name != ""){
+                $('#roomname').val('');
+                socket.emit('create', name)
+            }else{
+                console.log('geen valide waarde');
+            }
         });
 
         $('#JoinGame').click(function () {
@@ -143,6 +150,17 @@ $( document ).ready(function() {
         }
         return parms;
     }
+
+    /*========================Audio====================================================*/
+    var SuccesAudio = "../audio/162473-successful.mp3";
+    $('#image_rock,#image_paper,#image_scissor').click(function () {
+        new Audio(SuccesAudio).play();
+    });
+
+    var BackgroundMusic = "../audio/8bitBackgroundMusic.mp3";
+    var BGLoop = new Audio(BackgroundMusic);
+    BGLoop.loop = true;
+    BGLoop.play();
 
 });
 

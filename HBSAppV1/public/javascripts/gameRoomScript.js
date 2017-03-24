@@ -1,6 +1,3 @@
-/**
- * Created by nikro on 23-3-2017.
- */
 $( document ).ready(function() {
 
     function loadJSON(callback) {
@@ -27,11 +24,6 @@ $( document ).ready(function() {
 
             return connection;
 
-            // var socket = io.connect(connection);
-
-            // return socket;
-
-
         })
     );
     var url;
@@ -53,9 +45,6 @@ $( document ).ready(function() {
 
         $("#Players").html('');
         for(var p in arrayN){
-            // if ('' + arrayN[p] == '' + params.Name){
-            //     alert('names all of them');
-            // }
             $("<p>" + arrayN[p] + " " + arrayS[p] + "</p>").appendTo($("#Players"));
         }
     })
@@ -173,7 +162,7 @@ $( document ).ready(function() {
 
         //Status updaten
         $('.status').fadeOut(500, function() {
-            $(this).html("<p>You've chosen: <Rock></Rock></p>").fadeIn(500);
+            $(this).html("<p>You've chosen: Rock</p>").fadeIn(500);
         });
     });
 
@@ -183,5 +172,24 @@ $( document ).ready(function() {
 
     });
 
+    /*============================================Chat==========================================*/
+
+    socket.on('updatechat', function (username, data) {
+        if(data != null && data != ""){
+            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            var element = document.getElementById("conversation");
+            element.scrollTop = element.scrollHeight;
+        }else{
+            console.log('geen valide waarde');
+        }
+    });
+
+    $('#datasend').click( function() {
+        var message = $('#data').val();
+        $('#data').val('');
+        socket.emit('sendchat', message);
+    });
+
 });
+
 

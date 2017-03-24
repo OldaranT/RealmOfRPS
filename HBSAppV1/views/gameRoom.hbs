@@ -4,19 +4,42 @@
 <!--<script src="/javascripts/script.js"></script>-->
 <script src="/javascripts/gameRoomScript.js"></script>
 <!--<script src="/javascripts/roomScript.js"></script>-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!--HTML-->
-
 <div class="wrapper">
     <h1 id="title">Welcome to room: ...</h1>
+    <section class="section-container">
+        <article class="article-1">
 
-    <div class="status"><p>Choose an option</p></div>
+            <div class="status"><b>Choose an option</b></div>
 
-    <div class="choices">
-        <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>
-        <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>
-        <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>
-    </div>
+            <div class="choices">
+                <img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>
+                <img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>
+                <img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>
+            </div>
+            <div class="room-margin">
+                <b>Moment geduld aub</b>
+            </div>
+
+        </article>
+        <article class="article-1">
+            <div>
+                <b id="chat-name">CHAT</b>
+                <div class="parent">
+                    <div id="conversation" class="article-2"></div>
+
+                </div>
+                <div class="room-margin">
+                    <input class="text-input text-input3" id="data" placeholder="Type a message..."/>
+                    <input class="game-button button3" type="button" id="datasend" value="send" />
+                </div>
+
+            </div>
+        </article>
+    </section>
+
     <div>
         <button id="button">button</button>
     </div>

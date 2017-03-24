@@ -3,26 +3,43 @@
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <!--<script src="/javascripts/script.js"></script>-->
 <script src="/javascripts/roomScript.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!--HTML-->
-<h1>Steen Papier schaar!</h1>
-<div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
-    <button type="button" id="JoinGame">Join</button>
-    <b>ROOMS</b>
-    <div id="rooms"></div>
-</div>
+<div class="wrapper">
+    <h1>Steen Papier schaar!</h1>
+    <section class="section-container">
+        <article class="article-1">
+            <div>
+                <b>CREATE ROOM</b>
+                <div id="room creation">
+                    <input class="text-input text-input2" id="roomname" placeholder="Enter name">
+                    <input class="game-button button2" type="button" id="roombutton" value="CREATE">
+                </div>
+            </div>
+            <div class="room-margin">
+                <b>ROOMS</b>
+                <div class="parent-roomlist">
+                    <div id="rooms" class="article-3"></div>
+                </div>
+            </div>
+            <div class="room-margin">
+                <button class="game-button button1" type="button" id="JoinGame">Join</button>
+            </div>
+        </article>
+        <article class="article-1">
+            <div>
+                <b id="chat-name">CHAT</b>
+                <div class="parent">
+                    <div id="conversation" class="article-2"></div>
 
-<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
-    <div id="conversation"></div>
-    <input id="data" style="width:200px;" />
-    <input type="button" id="datasend" value="send" />
-</div>
+                </div>
+                <div class="room-margin">
+                    <input class="text-input text-input3" id="data" placeholder="Type a message..."/>
+                    <input class="game-button button3" type="button" id="datasend" value="send" />
+                </div>
 
-<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
-    <div id="room creation"></div>
-    <input id="roomname" style="width:200px;" />
-    <input type="button" id="roombutton" value="create room" />
+            </div>
+        </article>
+    </section>
 </div>
-<script>
-
-</script>
