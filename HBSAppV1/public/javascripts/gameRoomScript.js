@@ -103,13 +103,13 @@ $( document ).ready(function() {
 /*========================Game inputs====================================================*/
 
     socket.on('GameData', function(arrayN, arrayP, arrayC) {
-        var scissorImg = '<img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>';
-        var paperImg = '<img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>';
-        var rockImg = '<img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>';
+        var scissorImg = '<img id="image_scissor" class="slideInRight" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>';
+        var paperImg = '<img id="image_paper" class="slideInRight" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>';
+        var rockImg = '<img id="image_rock" class="slideInRight" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>';
 
         $('#results').empty();
         $('#results-view').removeClass('hide');
-        $('#results-view').addClass('fadeInleft');
+        $('#results-view').addClass('fadeInleftFast');
         $('#game-view').addClass('hide');
         for(var n in arrayN){
             if(arrayC[n] == 1){
