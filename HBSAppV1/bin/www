@@ -288,15 +288,31 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('disconnect', function() {
-        if(arrayN.length < 2){
-            gameReady = false;
-            socket.nsp.to(socket.room).emit('GameReady', gameReady);
+        var room = '';
+        var index = arrayN.indexOf(socket.username);
+        console.log(index);
+        if(index>0){
+            arrayN.splice(index, 1);
         }
+        console.log(arrayN.indexOf(socket.username));
+        console.log('================================================================================================================================================================');
+
         if(socket.username != null){
+            if (socket.room != null){
+                room = socket.room
+                console.log(room);
+            }
             delete usernames[socket.username];
             io.sockets.emit('updateusers', usernames);
             socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
             socket.leave(socket.room);
+            console.log(arrayN.length);
+
+            if(arrayN.length < 2){
+                gameReady = false;
+                socket.nsp.to(room).emit('GameReady', gameReady);
+                console.log('game is niet ready');
+            }
         }
     });
 

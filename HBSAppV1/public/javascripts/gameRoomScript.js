@@ -57,16 +57,6 @@ $( document ).ready(function() {
 
     $('#results-view').addClass('hide');
 
-    $('#button').click(function(){
-        console.log('button');
-        url = window.location.href;
-        params = parseURLParams(url);
-        // string = JSON.stringify(params);
-        string = urlString(params);
-        alert('hi');
-        alert(string);
-    });
-
     function parseURLParams(url) {
         var queryStart = url.indexOf("?") + 1,
             queryEnd   = url.indexOf("#") + 1 || url.length + 1,
