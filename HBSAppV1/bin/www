@@ -118,6 +118,10 @@ io.sockets.on('connection', function (socket) {
 });
 
 var usernames = {};
+var temp = '';
+var temp2 = '';
+var toRemove;
+var redirect = false;
 
 var rooms = ['Lobby'];
 
@@ -142,29 +146,64 @@ io.sockets.on('connection', function(socket) {
         socket.emit('updaterooms', rooms, socket.room);
     });
 
-    socket.on('users', function () {
+    socket.on('users', function (name) {
 
+        // temp2 = name ;
+        // for (var n in arrayN){
+        //
+        //     temp = '' + arrayN[n];
+        //     console.log(temp);
+        //     console.log(temp2);
+        //     if (temp == name){
+        //         console.log('double');
+        //         redirect = true;
+        //         toRemove = arrayN[n];
+        //     }
+        // }
+
+        console.log(name);
         arrayN = [];
         arrayS = [];
         var string = '';
         var clients_in_the_room = io.sockets.adapter.rooms[socket.room];
-        for (var clientId in clients_in_the_room['sockets'] ) {
-            // console.log('client: %s', clientId); //Seeing is believing
-            var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
-            arrayN.push(client_socket['username']);
-            arrayS.push(client_socket['status']);
-        }
-        for (var s in arrayN){
-            string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
-        }
-        console.log(string);
 
-        socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+            for (var clientId in clients_in_the_room['sockets'] ) {
+                // console.log('client: %s', clientId); //Seeing is believing
+                var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
+                arrayN.push(client_socket['username']);
+                arrayS.push(client_socket['status']);
+            }
+            for (var s in arrayN){
+                string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
+            }
+            console.log(string);
+
+
+
+
+
+        // if (redirect){
+        //     redirect = false;
+            // removePlayer(toRemove);
+            // socket.emit('redirect');
+            // console.log('redirect');
+        // }else{
+            socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+        // }
+
+
 
         // socket.broadcast.to(socket.room).emit('Players', arrayN, arrayS);
     });
     
     socket.on('gameRoomJoin', function (username, room) {
+
+        if (arrayN.indexOf(username) < 0){
+            console.log(arrayN.indexOf(username));
+            console.log(arrayN[0]);
+        }else{
+            console.log('say hi')
+        }
         socket.username = username;
         socket.room = room;
         socket.status = null;

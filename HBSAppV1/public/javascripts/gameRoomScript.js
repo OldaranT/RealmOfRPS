@@ -41,16 +41,21 @@ $( document ).ready(function() {
     var player;
     socket.on('connect', function (data) {
         url = window.location.href;
+        // alert(url);
         params = parseURLParams(url);
         room = params.Room;
         setTitle(room);
         socket.emit('gameRoomJoin', params.Name, room);
-        socket.emit('users');
+        socket.emit('users', params.Name);
     });
 
     socket.on('Players', function (arrayN, arrayS) {
+
         $("#Players").html('');
         for(var p in arrayN){
+            // if ('' + arrayN[p] == '' + params.Name){
+            //     alert('names all of them');
+            // }
             $("<p>" + arrayN[p] + " " + arrayS[p] + "</p>").appendTo($("#Players"));
         }
     })
@@ -64,6 +69,11 @@ $( document ).ready(function() {
         alert('hi');
         alert(string);
     });
+
+    socket.on('redirect', function () {
+        console.log('direct');
+        document.location.href = 'register';
+    })
 
     function parseURLParams(url) {
         var queryStart = url.indexOf("?") + 1,
