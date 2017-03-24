@@ -164,5 +164,24 @@ $( document ).ready(function() {
 
     });
 
+    /*============================================Chat==========================================*/
+
+    socket.on('updatechat', function (username, data) {
+        if(data != null && data != ""){
+            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            var element = document.getElementById("conversation");
+            element.scrollTop = element.scrollHeight;
+        }else{
+            console.log('geen valide waarde');
+        }
+    });
+
+    $('#datasend').click( function() {
+        var message = $('#data').val();
+        $('#data').val('');
+        socket.emit('sendchat', message);
+    });
+
 });
+
 
