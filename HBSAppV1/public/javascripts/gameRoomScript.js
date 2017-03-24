@@ -57,16 +57,6 @@ $( document ).ready(function() {
 
     $('#results-view').addClass('hide');
 
-    $('#button').click(function(){
-        console.log('button');
-        url = window.location.href;
-        params = parseURLParams(url);
-        // string = JSON.stringify(params);
-        string = urlString(params);
-        alert('hi');
-        alert(string);
-    });
-
     function parseURLParams(url) {
         var queryStart = url.indexOf("?") + 1,
             queryEnd   = url.indexOf("#") + 1 || url.length + 1,
@@ -131,6 +121,16 @@ $( document ).ready(function() {
             }
         }
         $('.choices, #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
+
+        socket.on('GameWinner', function (gameWinner) {
+            if(gameWinner == null){
+                $('#winner').html('<b>Result: Het is gelijk spel. </b>');
+                console.log(gameWinner);
+            }else{
+                $('#winner').html('<b>Result: De winnaar is ' + gameWinner + '</b>');
+                console.log(gameWinner);
+            }
+        });
 
     });
 
@@ -223,5 +223,26 @@ $( document ).ready(function() {
             $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
         });
     };
+
+
+    $(function(){
+        $('#datasend').click( function() {
+            var message = $('#data').val();
+            $('#data').val('');
+            socket.emit('sendchat', message);
+        });
+
+        $('#data').keypress(function(e) {
+            if(e.which == 13) {
+                $(this).blur();
+                $('#datasend').focus().click();
+            }
+        });
+
+        $('#datasend').click(function() {
+            $('#data').focus();
+        });
+
+    });
 
 });
