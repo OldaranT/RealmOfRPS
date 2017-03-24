@@ -119,6 +119,7 @@ $( document ).ready(function() {
 
         $('#results').empty();
         $('#results-view').removeClass('hide');
+        $('#results-view').addClass('fadeInleft');
         $('#game-view').addClass('hide');
         for(var n in arrayN){
             if(arrayC[n] == 1){
