@@ -131,6 +131,16 @@ $( document ).ready(function() {
         }
         $('.choices, #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
 
+        socket.on('GameWinner', function (gameWinner) {
+            if(gameWinner == null){
+                $('#winner').html('<b>Result: Het is gelijk spel. </b>');
+                console.log(gameWinner);
+            }else{
+                $('#winner').html('<b>Result: De winnaar is ' + gameWinner + '</b>');
+                console.log(gameWinner);
+            }
+        });
+
     });
 
     /*========================Server response====================================================*/
