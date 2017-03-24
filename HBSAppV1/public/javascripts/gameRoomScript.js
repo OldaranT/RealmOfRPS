@@ -105,6 +105,7 @@ $( document ).ready(function() {
 /*========================Game inputs====================================================*/
 
     $('#image_scissor').click(function () {
+        $(this).unbind( "click" );
         console.log("Schaar geklikt!")
         socket.emit('choice', "scissor");
         // $('.choices img').not('#image_scissor').addClass('hide');
@@ -122,9 +123,16 @@ $( document ).ready(function() {
         $('.status').fadeOut(500, function() {
             $(this).html("<b>You've chosen: Scissors</b>").fadeIn(500);
         });
+        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
+        i = 0;
+        setInterval(function() {
+            i = ++i % 4;
+            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
+        }, 500);
     });
 
     $('#image_paper').click(function () {
+        $(this).unbind( "click" );
         console.log("Papier geklikt!")
         socket.emit('choice', "paper");
         // $('.choices').addClass('hide');
@@ -142,9 +150,16 @@ $( document ).ready(function() {
         $('.status').fadeOut(500, function() {
             $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
         });
+        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
+        i = 0;
+        setInterval(function() {
+            i = ++i % 4;
+            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
+        }, 500);
     });
 
     $('#image_rock').click(function () {
+        $(this).unbind( "click" );
         console.log("Steen geklikt!")
         socket.emit('choice', "rock");
         //$('.choices').addClass('hide');
@@ -163,6 +178,12 @@ $( document ).ready(function() {
         $('.status').fadeOut(500, function() {
             $(this).html("<b>You've chosen: Rock</b>").fadeIn(500);
         });
+        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
+        i = 0;
+        setInterval(function() {
+            i = ++i % 4;
+            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
+        }, 500);
     });
 
     /*========================Server response====================================================*/
@@ -175,7 +196,7 @@ $( document ).ready(function() {
 
     socket.on('updatechat', function (username, data) {
         if(data != null && data != ""){
-            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            $('#conversation').append('<b class="fadeInleftFast">'+ username + ':</b> ' + data + '<br>');
             var element = document.getElementById("conversation");
             element.scrollTop = element.scrollHeight;
         }else{
