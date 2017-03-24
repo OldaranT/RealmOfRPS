@@ -43,7 +43,7 @@ $( document ).ready(function() {
 
     socket.on('updatechat', function (username, data) {
         if(data != null && data != ""){
-            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            $('#conversation').append('<b class="fadeInleftFast">'+ username + ':</b> ' + data + '<br>');
             var element = document.getElementById("conversation");
             element.scrollTop = element.scrollHeight;
         }else{

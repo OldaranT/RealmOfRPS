@@ -236,12 +236,20 @@ io.sockets.on('connection', function(socket) {
         }
         console.log(string);
 
-            socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+        socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+
     });
     socket.on('updateUsers', function (status, choice) {
         socket.status = status;
         socket.choice = choice;
 
+    });
+
+    socket.on('gameReadyCheck', function () {
+        if(arrayN.length > 1){
+            gameReady = true;
+            socket.nsp.to(socket.room).emit('GameReady', gameReady);
+        }
     });
 
     socket.on('gameRoomJoin', function (username, room) {
@@ -259,10 +267,7 @@ io.sockets.on('connection', function(socket) {
         usernames[username] = username;
         socket.join(room);
         socket.broadcast.to(room).emit('updateRoom');
-        if(arrayN.length > 1){
-            gameReady = true;
-            socket.nsp.to(socket.room).emit('GameReady', gameReady);
-        }
+
     })
 
     socket.on('sendchat', function(data) {

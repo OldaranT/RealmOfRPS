@@ -40,6 +40,7 @@ $( document ).ready(function() {
         setTitle(room);
         socket.emit('gameRoomJoin', params.Name, room);
         socket.emit('users');
+        socket.emit('gameReadyCheck');
     });
 
     socket.on('Players', function (arrayN, arrayS) {
@@ -111,75 +112,6 @@ $( document ).ready(function() {
 
 /*========================Game inputs====================================================*/
 
-    $('#image_scissor').click(function () {
-        console.log("Schaar geklikt!");
-        OnClickUpdate(1);
-        // $('.choices img').not('#image_scissor').addClass('hide');
-        $('.choices img').not('#image_scissor').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            $(this).addClass('hide');
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Scissors</b>").fadeIn(500);
-        });
-
-    });
-
-    $('#image_paper').click(function () {
-        console.log("Papier geklikt!");
-        OnClickUpdate(2);
-        // $('.choices').addClass('hide');
-        $('.choices img').not('#image_paper').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            $(this).addClass('hide');
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
-        });
-    });
-
-    $('#image_rock').click(function () {
-        console.log("Steen geklikt!");
-        OnClickUpdate(3);
-        //$('.choices').addClass('hide');
-        $('.choices img').not('#image_rock').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            //$(this).addClass('hide');
-            $(this).remove();
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Rock</b>").fadeIn(500);
-        });
-    });
-
-    function OnClickUpdate(choice) {
-        socket.emit('choice', choice);
-        socket.emit('updateUsers', 1, choice);
-        socket.emit('users');
-        socket.emit('gameStatus');
-    }
-
     socket.on('GameData', function(arrayN, arrayP, arrayC) {
         var scissorImg = '<img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>';
         var paperImg = '<img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>';
@@ -197,11 +129,9 @@ $( document ).ready(function() {
                 $(rockImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
             }
         }
-        $('.choices #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
+        $('.choices, #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
 
     });
-
-
 
     /*========================Server response====================================================*/
     socket.on('results', function (data, user_id) {
@@ -213,7 +143,7 @@ $( document ).ready(function() {
 
     socket.on('updatechat', function (username, data) {
         if(data != null && data != ""){
-            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            $('#conversation').append('<b class="fadeInleftFast">'+ username + ':</b> ' + data + '<br>');
             var element = document.getElementById("conversation");
             element.scrollTop = element.scrollHeight;
         }else{
@@ -227,6 +157,70 @@ $( document ).ready(function() {
         socket.emit('sendchat', message);
     });
 
+    socket.on('GameReady', function (moreThanTwoPlayers) {
+        if (moreThanTwoPlayers){
+            console.log("Room ready");
+            $('#image_rock').bind('click', function(){
+                ChoiceClickFunction('rock');
+            });
+            $('#image_scissor').bind('click', function(){
+                ChoiceClickFunction('scissor');
+            });
+            $('#image_paper').bind('click', function(){
+                ChoiceClickFunction('paper');
+            });
+        } else {
+            console.log("Room not ready");
+            $('#image_rock').unbind( "click" );
+            $('#image_scissor').unbind( "click" );
+            $('#image_paper').unbind( "click" );
+        }
+    });
+
+    /*============================================Function==========================================*/
+    function OnClickUpdate(choice) {
+        socket.emit('choice', choice);
+        socket.emit('updateUsers', 1, choice);
+        socket.emit('users');
+        socket.emit('gameStatus');
+    }
+
+    function ChoiceClickFunction(choice) {
+        $('#image_' + choice).unbind( "click" );
+        console.log(choice + " geklikt!");
+        var RPS = null;
+        if (choice == 'scissor'){
+            RPS = 1;
+        } else if (choice == 'paper'){
+            RPS = 2;
+        } else {
+            RPS = 3;
+        }
+
+        OnClickUpdate(RPS);
+
+        $('.choices img').not('#image_' + choice).animate({
+            padding: "0px",
+            'margin-left':'-10px',
+            'height': "0px",
+            'width': "0px"
+        }, 500, function() {
+
+            $(this).addClass('hide');
+        });
+
+        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
+        i = 0;
+        setInterval(function() {
+            i = ++i % 4;
+            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
+        }, 500);
+
+
+        //Status updaten
+        $('.status').fadeOut(500, function() {
+            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
+        });
+    };
+
 });
-
-
