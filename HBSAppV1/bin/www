@@ -207,15 +207,18 @@ io.sockets.on('connection', function(socket) {
         if(playerIndexArray.length > 1){
             console.log('Het is een draw');
         }else{
-                var index = playerIndexArray[0];
-                console.log("Deze speler heeft gewonnen:" + arrayN[index]);
+            var index = playerIndexArray[0];
+            console.log("Deze speler heeft gewonnen:" + arrayN[index]);
+            socket.nsp.to(socket.room).emit('GameWinner', arrayN[index]);
         }
+        socket.nsp.to(socket.room).emit('GameData', arrayN, arrayP, arrayC);
+
 
     }
     socket.on('users', function () {
         arrayN = [];
-        arrayS = [];
         arrayC = [];
+        arrayS = [];
         arrayP = [];
         var string = '';
         clients_in_the_room = io.sockets.adapter.rooms[socket.room];
