@@ -478,7 +478,7 @@ article{
   color: white;
 }
 
-.roomlist{
+.room-margin{
   margin-top: 5%;
 }
 
@@ -647,6 +647,10 @@ article{
    =============================================================================
 */
 
+.choices #image_scissor,#image_rock,#image_paper{
+  height: 30%;
+  width: 30%;
+}
 .choices #image_scissor{
   animation: scissorIntroAnimation 1.5s;
 }
