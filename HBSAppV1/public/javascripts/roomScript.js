@@ -79,7 +79,7 @@ $( document ).ready(function() {
         player(ID, name, room);
         var Roomurl = encodeQueryData(Player);
         document.location.href = 'gameRoom?' + Roomurl;
-    })
+    });
 
     $(function(){
         $('#datasend').click( function() {
@@ -93,6 +93,10 @@ $( document ).ready(function() {
                 $(this).blur();
                 $('#datasend').focus().click();
             }
+        });
+
+        $('#datasend').click(function() {
+            $('#data').focus();
         });
 
         $('#roombutton').click(function(){
