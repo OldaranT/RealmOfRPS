@@ -497,6 +497,11 @@ article{
   width: 100%;
   overflow: hidden;
 }
+.parent-results{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
 
 /*
    =============================================================================
@@ -648,8 +653,8 @@ article{
 */
 
 .choices #image_scissor,#image_rock,#image_paper{
-  height: 30%;
-  width: 30%;
+    height: 30%;
+    width: 30%;
 }
 .choices #image_scissor{
   animation: scissorIntroAnimation 1.5s;

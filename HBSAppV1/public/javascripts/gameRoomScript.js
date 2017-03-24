@@ -54,6 +54,8 @@ $( document ).ready(function() {
         }
     });
 
+    $('#results-view').addClass('hide');
+
     $('#button').click(function(){
         console.log('button');
         url = window.location.href;
@@ -177,6 +179,29 @@ $( document ).ready(function() {
         socket.emit('users');
         socket.emit('gameStatus');
     }
+
+    socket.on('GameData', function(arrayN, arrayP, arrayC) {
+        var scissorImg = '<img id="image_scissor" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>';
+        var paperImg = '<img id="image_paper" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>';
+        var rockImg = '<img id="image_rock" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>';
+
+        $('#results').empty();
+        $('#results-view').removeClass('hide');
+        $('#game-view').addClass('hide');
+        for(var n in arrayN){
+            if(arrayC[n] == 1){
+                $(scissorImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
+            }else if(arrayC[n] == 2){
+                $(paperImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
+            }else if(arrayC[n] == 3){
+                $(rockImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
+            }
+        }
+        $('.choices #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
+
+    });
+
+
 
     /*========================Server response====================================================*/
     socket.on('results', function (data, user_id) {
