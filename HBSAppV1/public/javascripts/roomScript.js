@@ -105,6 +105,13 @@ $( document ).ready(function() {
             }
         });
 
+        $('#roomname').keypress(function(e) {
+            if(e.which == 13) {
+                $(this).blur();
+                $('#roombutton').focus().click();
+            }
+        });
+
         $('#JoinGame').click(function () {
             console.log('clicked');
             socket.emit('joinGame');
