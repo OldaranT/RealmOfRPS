@@ -206,6 +206,7 @@ io.sockets.on('connection', function(socket) {
         }
         if(playerIndexArray.length > 1){
             console.log('Het is een draw');
+            socket.nsp.to(socket.room).emit('GameWinner', null);
         }else{
             var index = playerIndexArray[0];
             console.log("Deze speler heeft gewonnen:" + arrayN[index]);

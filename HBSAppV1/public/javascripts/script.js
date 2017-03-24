@@ -67,6 +67,15 @@ $( document ).ready(function() {
     });
 
 
+
+    $('#userNameInput').keypress(function(e) {
+        if(e.which == 13) {
+            $(this).blur();
+            $('#UsernameplayButton').focus().click();
+        }
+    });
+
+
 /*========================Audio====================================================*/
     var SuccesAudio = "../audio/162473-successful.mp3";
     $('#image_rock,#image_paper,#image_scissor').click(function () {
