@@ -43,7 +43,7 @@ $( document ).ready(function() {
 
     socket.on('updatechat', function (username, data) {
         if(data != null && data != ""){
-            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            $('#conversation').append('<b class="fadeInleftFast">'+ username + ':</b> ' + data + '<br>');
             var element = document.getElementById("conversation");
             element.scrollTop = element.scrollHeight;
         }else{
@@ -79,7 +79,7 @@ $( document ).ready(function() {
         player(ID, name, room);
         var Roomurl = encodeQueryData(Player);
         document.location.href = 'gameRoom?' + Roomurl;
-    })
+    });
 
     $(function(){
         $('#datasend').click( function() {
@@ -95,6 +95,10 @@ $( document ).ready(function() {
             }
         });
 
+        $('#datasend').click(function() {
+            $('#data').focus();
+        });
+
         $('#roombutton').click(function(){
             var name = $('#roomname').val();
             if(name != null && name != ""){
@@ -102,6 +106,13 @@ $( document ).ready(function() {
                 socket.emit('create', name)
             }else{
                 console.log('geen valide waarde');
+            }
+        });
+
+        $('#roomname').keypress(function(e) {
+            if(e.which == 13) {
+                $(this).blur();
+                $('#roombutton').focus().click();
             }
         });
 

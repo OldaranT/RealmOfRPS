@@ -275,7 +275,7 @@ article{
   padding: 5%;
 
   width: 100%;
-  height: 200px;
+  height: 300px;
   overflow-y: scroll;
   /*padding-right: 17px;*/
 }
@@ -410,6 +410,20 @@ article{
   color: white;
 }
 
+
+.button5 {
+  background-color: white;
+  color: #4CAF50;
+  width: 100%;
+  float: right;
+  border: 2px solid #4CAF50;
+}
+
+.button5:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
 .text-input{
   background-color: #4CAF50; /* Green */
   border: none;
@@ -497,6 +511,11 @@ article{
   width: 100%;
   overflow: hidden;
 }
+.parent-results{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
 
 /*
    =============================================================================
@@ -550,6 +569,9 @@ article{
   #image_logo{
     height: 32px;
   }
+  #logo {
+    width: 100%;
+  }
 }
 
 /*
@@ -559,12 +581,13 @@ article{
 */
 @media (min-width: 480px) {
   html,body{
-
     overflow: hidden;
   }
   h1{
     display: inline-block;
-
+    color: white;
+    font-size: 30px;
+    margin-top: -30px;
   }
   .main-nav{
     width: 100%;
@@ -648,13 +671,12 @@ article{
 */
 
 .choices #image_scissor,#image_rock,#image_paper{
-  height: 30%;
-  width: 30%;
+  height: 32%;
+  width: 32%;
 }
 .choices #image_scissor{
   animation: scissorIntroAnimation 1.5s;
 }
-
 .choices #image_paper{
   animation: paperIntroAnimation 1.5s;
 }
@@ -698,5 +720,65 @@ article{
   100% {
     transform: rotateY(0deg);
     opacity: 1.0;
+  }
+}
+
+/*
+   =============================================================================
+   ============================= Loading animation ============================
+   =============================================================================
+*/
+
+.fadeInleft {
+  animation: fadeInLeft 2s;
+}
+
+.fadeInleftFast {
+  animation: fadeInLeft 0.5s;
+}
+
+.slideInRight{
+  animation: slideInRight 0.5s;
+}
+
+.slideInLeft{
+  animation: slideInLeft 0.5s;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    margin-left: -20px;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+@keyframes slideInLeft {
+  from {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }

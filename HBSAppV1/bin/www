@@ -205,16 +205,22 @@ io.sockets.on('connection', function(socket) {
         }
         if(playerIndexArray.length > 1){
             console.log('Het is een draw');
+            socket.nsp.to(socket.room).emit('GameWinner', null);
+            console.log(socket.room);
         }else{
-                var index = playerIndexArray[0];
-                console.log("Deze speler heeft gewonnen:" + arrayN[index]);
+            var index = playerIndexArray[0];
+            console.log("Deze speler heeft gewonnen:" + arrayN[index]);
+            socket.nsp.to(socket.room).emit('GameWinner', arrayN[index]);
+            console.log(socket.room);
         }
+        socket.nsp.to(socket.room).emit('GameData', arrayN, arrayP, arrayC);
+
 
     }
     socket.on('users', function () {
         arrayN = [];
-        arrayS = [];
         arrayC = [];
+        arrayS = [];
         arrayP = [];
         var string = '';
         var clients_in_the_room = io.sockets.adapter.rooms[socket.room];
@@ -258,7 +264,6 @@ io.sockets.on('connection', function(socket) {
         }
         clients_in_the_room = io.sockets.adapter.rooms[socket.room];
         for (var clientId in clients_in_the_room['sockets'] ) {
-            // console.log('client: %s', clientId);
             client_socket = io.sockets.connected[clientId];
             arrayN.push(client_socket['username']);
             arrayS.push(client_socket['status']);
@@ -269,9 +274,9 @@ io.sockets.on('connection', function(socket) {
         for (var s in arrayN){
             string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
         }
-        console.log(string);
 
-            socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+        socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
+
     });
     socket.on('updateUsers', function (status, choice) {
         socket.status = status;
@@ -279,14 +284,14 @@ io.sockets.on('connection', function(socket) {
 
     });
 
-    socket.on('gameRoomJoin', function (username, room) {
-
-        if (arrayN.indexOf(username) < 0){
-            console.log(arrayN.indexOf(username));
-            console.log(arrayN[0]);
-        }else{
-            console.log('say hi')
+    socket.on('gameReadyCheck', function () {
+        if(arrayN.length > 1){
+            gameReady = true;
+            socket.nsp.to(socket.room).emit('GameReady', gameReady);
         }
+    });
+
+    socket.on('gameRoomJoin', function (username, room) {
         socket.username = username;
         socket.room = room;
         socket.status = 0;
@@ -294,10 +299,7 @@ io.sockets.on('connection', function(socket) {
         usernames[username] = username;
         socket.join(room);
         socket.broadcast.to(room).emit('updateRoom');
-        if(arrayN.length > 1){
-            gameReady = true;
-            socket.nsp.to(socket.room).emit('GameReady', gameReady);
-        }
+
     })
 
     socket.on('sendchat', function(data) {
@@ -317,15 +319,26 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('disconnect', function() {
-        if(arrayN.length < 2){
-            gameReady = false;
-            socket.nsp.to(socket.room).emit('GameReady', gameReady);
+        var room = '';
+        var index = arrayN.indexOf(socket.username);
+        if(index>0){
+            arrayN.splice(index, 1);
         }
+
         if(socket.username != null){
+            if (socket.room != null){
+                room = socket.room
+            }
             delete usernames[socket.username];
             io.sockets.emit('updateusers', usernames);
             socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
             socket.leave(socket.room);
+
+            if(arrayN.length < 2){
+                gameReady = false;
+                socket.nsp.to(room).emit('GameReady', gameReady);
+                console.log('game is niet ready');
+            }
         }
     });
 

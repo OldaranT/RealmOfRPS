@@ -40,6 +40,7 @@ $( document ).ready(function() {
         setTitle(room);
         socket.emit('gameRoomJoin', params.Name, room);
         socket.emit('users');
+        socket.emit('gameReadyCheck');
     });
 
     socket.on('Players', function (arrayN, arrayS) {
@@ -54,15 +55,7 @@ $( document ).ready(function() {
         }
     });
 
-    $('#button').click(function(){
-        console.log('button');
-        url = window.location.href;
-        params = parseURLParams(url);
-        // string = JSON.stringify(params);
-        string = urlString(params);
-        alert('hi');
-        alert(string);
-    });
+    $('#results-view').addClass('hide');
 
     socket.on('redirect', function () {
         console.log('direct');
@@ -101,6 +94,12 @@ $( document ).ready(function() {
         $('#title').html('Welcome to room: ' + title);
     }
 
+    $(function(){
+        $('#lobbyReturn').click( function() {
+            document.location.href = 'room?name='+ params.Name;
+        });
+    });
+
 /*========================Audio====================================================*/
     var SuccesAudio = "../audio/162473-successful.mp3";
     $('#image_rock,#image_paper,#image_scissor').click(function () {
@@ -114,74 +113,38 @@ $( document ).ready(function() {
 
 /*========================Game inputs====================================================*/
 
-    $('#image_scissor').click(function () {
-        console.log("Schaar geklikt!");
-        OnClickUpdate(1);
-        // $('.choices img').not('#image_scissor').addClass('hide');
-        $('.choices img').not('#image_scissor').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
+    socket.on('GameData', function(arrayN, arrayP, arrayC) {
+        var scissorImg = '<img id="image_scissor" class="slideInRight" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-014-512.png" height="200"/>';
+        var paperImg = '<img id="image_paper" class="slideInRight" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-005-512.png" height="200"/>';
+        var rockImg = '<img id="image_rock" class="slideInRight" src="https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-016-512.png" height="200"/>';
 
-            $(this).addClass('hide');
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Scissors</b>").fadeIn(500);
-        });
+        $('#results').empty();
+        $('#results-view').removeClass('hide');
+        $('#results-view').addClass('fadeInleftFast');
+        $('#game-view').addClass('hide');
+        for(var n in arrayN){
+            if(arrayC[n] == 1){
+                $(scissorImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
+            }else if(arrayC[n] == 2){
+                $(paperImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
+            }else if(arrayC[n] == 3){
+                $(rockImg + '<div>Naam: ' + arrayN[n] + ' Punten: ' + arrayP[n] + '</div>').appendTo($("#results"));
+            }
+        }
+        $('.choices, #image_scissor,#image_rock,#image_paper').css("height", "100px").css("width", "100px");
 
     });
 
-    $('#image_paper').click(function () {
-        console.log("Papier geklikt!");
-        OnClickUpdate(2);
-        // $('.choices').addClass('hide');
-        $('.choices img').not('#image_paper').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            $(this).addClass('hide');
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
-        });
+    socket.on('GameWinner', function (gameWinner) {
+        console.log(gameWinner);
+        if(gameWinner == null){
+            $('#winner').html('<b>Result: Het is gelijk spel. </b>');
+            console.log(gameWinner);
+        }else{
+            $('#winner').html('<b>Result: De winnaar is ' + gameWinner + '</b>');
+            console.log(gameWinner);
+        }
     });
-
-    $('#image_rock').click(function () {
-        console.log("Steen geklikt!");
-        OnClickUpdate(3);
-        //$('.choices').addClass('hide');
-        $('.choices img').not('#image_rock').animate({
-            padding: "0px",
-            'margin-left':'-10px',
-            'height': "0px",
-            'width': "0px"
-        }, 500, function() {
-
-            //$(this).addClass('hide');
-            $(this).remove();
-        });
-
-        //Status updaten
-        $('.status').fadeOut(500, function() {
-            $(this).html("<b>You've chosen: Rock</b>").fadeIn(500);
-        });
-    });
-
-    function OnClickUpdate(choice) {
-        socket.emit('choice', choice);
-        socket.emit('updateUsers', 1, choice);
-        socket.emit('users');
-        socket.emit('gameStatus');
-    }
 
     /*========================Server response====================================================*/
     socket.on('results', function (data, user_id) {
@@ -193,7 +156,7 @@ $( document ).ready(function() {
 
     socket.on('updatechat', function (username, data) {
         if(data != null && data != ""){
-            $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+            $('#conversation').append('<b class="fadeInleftFast">'+ username + ':</b> ' + data + '<br>');
             var element = document.getElementById("conversation");
             element.scrollTop = element.scrollHeight;
         }else{
@@ -207,6 +170,91 @@ $( document ).ready(function() {
         socket.emit('sendchat', message);
     });
 
+    socket.on('GameReady', function (moreThanTwoPlayers) {
+        if (moreThanTwoPlayers){
+            console.log("Room ready");
+            $('#image_rock').bind('click', function(){
+                ChoiceClickFunction('rock');
+            });
+            $('#image_scissor').bind('click', function(){
+                ChoiceClickFunction('scissor');
+            });
+            $('#image_paper').bind('click', function(){
+                ChoiceClickFunction('paper');
+            });
+        } else {
+            console.log("Room not ready");
+            $('#image_rock').unbind( "click" );
+            $('#image_scissor').unbind( "click" );
+            $('#image_paper').unbind( "click" );
+        }
+    });
+
+    /*============================================Function==========================================*/
+    function OnClickUpdate(choice) {
+        socket.emit('choice', choice);
+        socket.emit('updateUsers', 1, choice);
+        socket.emit('users');
+        socket.emit('gameStatus');
+    }
+
+    function ChoiceClickFunction(choice) {
+        $('#image_' + choice).unbind( "click" );
+        console.log(choice + " geklikt!");
+        var RPS = null;
+        if (choice == 'scissor'){
+            RPS = 1;
+        } else if (choice == 'paper'){
+            RPS = 2;
+        } else {
+            RPS = 3;
+        }
+
+        OnClickUpdate(RPS);
+
+        $('.choices img').not('#image_' + choice).animate({
+            padding: "0px",
+            'margin-left':'-10px',
+            'height': "0px",
+            'width': "0px"
+        }, 500, function() {
+
+            $(this).addClass('hide');
+        });
+
+        $('.loading').html('<b class="fadeInleft">Waiting for other players to make their choice</b>');
+        i = 0;
+        setInterval(function() {
+            i = ++i % 4;
+            $(".loading").html("Waiting for other players to make their choice"+Array(i+1).join("."));
+        }, 500);
+
+
+        //Status updaten
+        $('.status').fadeOut(500, function() {
+            $(this).html("<b>You've chosen: Paper</b>").fadeIn(500);
+        });
+    };
+
+
+    $(function(){
+        $('#datasend').click( function() {
+            var message = $('#data').val();
+            $('#data').val('');
+            socket.emit('sendchat', message);
+        });
+
+        $('#data').keypress(function(e) {
+            if(e.which == 13) {
+                $(this).blur();
+                $('#datasend').focus().click();
+            }
+        });
+
+        $('#datasend').click(function() {
+            $('#data').focus();
+        });
+
+    });
+
 });
-
-

@@ -66,6 +66,14 @@ $( document ).ready(function() {
 
     });
 
+    $('#userNameInput').focus();
+    $('#userNameInput').keypress(function(e) {
+        if(e.which == 13) {
+            $(this).blur();
+            $('#UsernameplayButton').focus().click();
+        }
+    });
+
 
 /*========================Audio====================================================*/
     var SuccesAudio = "../audio/162473-successful.mp3";
