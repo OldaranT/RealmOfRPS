@@ -10,7 +10,6 @@ $( document ).ready(function() {
 
                 // .open will NOT return a value but simply returns undefined in async mode so use a callback
                 callback(xobj.responseText);
-
             }
         }
         xobj.send(null);
@@ -46,8 +45,6 @@ $( document ).ready(function() {
             e.preventDefault();
             room = $('#Room').val();
             socket.emit('Room', room);
-            // dit verwijderd de join room form voor testen uitgeschakeld
-//     $('form').html('');
             console.log("User joined room: " + room);
         });
 
@@ -62,7 +59,6 @@ $( document ).ready(function() {
         });
 
 // Added since first release
-
 
     });
 

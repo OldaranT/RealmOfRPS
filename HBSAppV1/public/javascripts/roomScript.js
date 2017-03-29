@@ -1,6 +1,3 @@
-/**
- * Created by nikro on 21-3-2017.
- */
 $( document ).ready(function() {
 
     function loadJSON(callback) {
@@ -13,7 +10,6 @@ $( document ).ready(function() {
 
                 // .open will NOT return a value but simply returns undefined in async mode so use a callback
                 callback(xobj.responseText);
-
             }
         }
         xobj.send(null);
@@ -26,12 +22,6 @@ $( document ).ready(function() {
             var connection = jsonresponse.Connecten.ConnectString;
 
             return connection;
-
-            // var socket = io.connect(connection);
-
-            // return socket;
-
-
         })
     );
     socket.on('connect', function(){

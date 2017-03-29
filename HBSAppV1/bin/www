@@ -120,11 +120,6 @@ io.sockets.on('connection', function (socket) {
 
 
 var usernames = {};
-var temp = '';
-var temp2 = '';
-var toRemove;
-var redirect = false;
-
 var rooms = ['Lobby'];
 
 var client_socket;
@@ -136,9 +131,6 @@ var clients_in_the_room;
 var gameReady = false;
 
 io.sockets.on('connection', function(socket) {
-
-
-
 
 
     socket.on('adduser', function(username) {
@@ -242,23 +234,7 @@ io.sockets.on('connection', function(socket) {
             }
             console.log(string);
 
-
-
-
-
-        // if (redirect){
-        //     redirect = false;
-            // removePlayer(toRemove);
-            // socket.emit('redirect');
-            // console.log('redirect');
-        // }else{
-
             socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
-        // }
-
-
-
-        // socket.broadcast.to(socket.room).emit('Players', arrayN, arrayS);
     });
 
     socket.on('gameRoomJoin', function (username, room) {
@@ -279,10 +255,6 @@ io.sockets.on('connection', function(socket) {
             arrayC.push(client_socket['choice']);
             arrayP.push(client_socket['points']);
         }
-        /* dit moet later gedelete worden !*/
-        // for (var s in arrayN){
-        //     string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
-        // }
 
         socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
 
@@ -369,45 +341,3 @@ function player(id,choice){
     this.choice = choice;
     this.status = "waiting";
 }
-
-function getRoomUsers(roomName) {
-    var room = io.sockets.adapter.rooms[roomName];
-    var string;
-    for (var u in room){
-        string += u + " " + room[u] + "\n";
-    }
-    return string;
-}
-
-function findClientsSocket(roomId, namespace) {
-    var res = []
-        // the default namespace is "/"
-        , ns = io.of(namespace ||"/");
-    var string;
-
-    if (ns) {
-        for (var id in ns.connected) {
-            if(roomId) {
-                var index = ns.connected[id].rooms.indexOf(roomId);
-                if(index !== -1) {
-                    res.push(ns.connected[id]);
-                }
-            } else {
-                res.push(ns.connected[id]);
-            }
-        }
-    }
-
-    for(var s in res){
-        string += s + " " + res[s] + "\n";
-    }
-    return string;
-}
-
-function removePlayer(username) {
-    var i = arrayN.indexOf(username);
-    arrayN.splice(i, 1);
-    arrayS.splice(i, 1);
-}
-
-
