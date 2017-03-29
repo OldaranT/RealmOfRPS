@@ -127,16 +127,18 @@ var redirect = false;
 
 var rooms = ['Lobby'];
 
+var client_socket;
+var arrayN = [];// array met namen
+var arrayS = [];// array met statussen van spelers
+var arrayC = [];// array met choices van spelers
+var arrayP = [];// array met aantal punten per speler
+var clients_in_the_room;
+var gameReady = false;
+
 io.sockets.on('connection', function(socket) {
 
 
-    var client_socket;
-    var arrayN = [];// array met namen
-    var arrayS = [];// array met statussen van spelers
-    var arrayC = [];// array met choices van spelers
-    var arrayP = [];// array met aantal punten per speler
-    var clients_in_the_room;
-    var gameReady = false;
+
 
 
     socket.on('adduser', function(username) {
@@ -228,15 +230,17 @@ io.sockets.on('connection', function(socket) {
         var clients_in_the_room = io.sockets.adapter.rooms[socket.room];
 
             for (var clientId in clients_in_the_room['sockets'] ) {
-                // console.log('client: %s', clientId); //Seeing is believing
-                var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
+                console.log('client: %s', clientId);
+                var client_socket = io.sockets.connected[clientId];
                 arrayN.push(client_socket['username']);
                 arrayS.push(client_socket['status']);
+                arrayC.push(client_socket['choice']);
+                arrayP.push(client_socket['points']);
             }
-            // for (var s in arrayN){
-            //     string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
-            // }
-            // console.log(string);
+            for (var s in arrayN){
+                string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
+            }
+            console.log(string);
 
 
 
@@ -248,6 +252,7 @@ io.sockets.on('connection', function(socket) {
             // socket.emit('redirect');
             // console.log('redirect');
         // }else{
+
             socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
         // }
 
@@ -283,6 +288,7 @@ io.sockets.on('connection', function(socket) {
 
     });
     socket.on('updateUsers', function (status, choice) {
+        console.log(status + " " + choice);
         socket.status = status;
         socket.choice = choice;
 
