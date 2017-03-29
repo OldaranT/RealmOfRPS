@@ -275,6 +275,14 @@ article{
   padding: 5%;
 
   width: 100%;
+  height: 200px;
+  overflow-y: scroll;
+  /*padding-right: 17px;*/
+}
+.article-4{
+  padding: 5%;
+
+  width: 100%;
   height: 300px;
   overflow-y: scroll;
   /*padding-right: 17px;*/
@@ -298,7 +306,7 @@ article{
 .section-article-conatiner2{
   box-sizing: border-box;
   margin-bottom: 20px;
-  flex-basis: 47%;
+  flex-basis: 45%;
 }
 .section-article-conatiner3{
   box-sizing: border-box;
