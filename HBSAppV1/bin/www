@@ -256,9 +256,9 @@ io.sockets.on('connection', function(socket) {
             arrayP.push(client_socket['points']);
         }
 
-        socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
-
+        socket.nsp.to(room).emit('updateRoom');
     });
+
     socket.on('updateUsers', function (status, choice) {
         console.log(status + " " + choice);
         socket.status = status;
