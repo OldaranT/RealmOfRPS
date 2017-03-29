@@ -117,16 +117,18 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-var usernames = {};
-var temp = '';
-var temp2 = '';
-var toRemove;
-var redirect = false;
 
-var rooms = ['Lobby'];
 
 
 io.sockets.on('connection', function(socket) {
+
+    var usernames = {};
+    var temp = '';
+    var temp2 = '';
+    var toRemove;
+    var redirect = false;
+
+    var rooms = ['Lobby'];
 
     var client_socket;
     var arrayN = [];// array met namen
@@ -231,10 +233,10 @@ io.sockets.on('connection', function(socket) {
                 arrayN.push(client_socket['username']);
                 arrayS.push(client_socket['status']);
             }
-            for (var s in arrayN){
-                string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
-            }
-            console.log(string);
+            // for (var s in arrayN){
+            //     string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
+            // }
+            // console.log(string);
 
 
 
@@ -253,16 +255,18 @@ io.sockets.on('connection', function(socket) {
 
         // socket.broadcast.to(socket.room).emit('Players', arrayN, arrayS);
     });
-    
-    socket.on('gameRoomJoin', function (username, room) {
 
-        if (arrayN.indexOf(username) < 0){
-            console.log(arrayN.indexOf(username));
-            console.log(arrayN[0]);
-        }else{
-            console.log('say hi')
-        }
+    socket.on('gameRoomJoin', function (username, room) {
+        socket.username = username;
+        socket.room = room;
+        socket.status = 0;
+        socket.points = 0;
+        usernames[username] = username;
+        socket.join(room);
+        socket.broadcast.to(room).emit('updateRoom');
+
         clients_in_the_room = io.sockets.adapter.rooms[socket.room];
+        console.log(clients_in_the_room);
         for (var clientId in clients_in_the_room['sockets'] ) {
             client_socket = io.sockets.connected[clientId];
             arrayN.push(client_socket['username']);
@@ -271,9 +275,9 @@ io.sockets.on('connection', function(socket) {
             arrayP.push(client_socket['points']);
         }
         /* dit moet later gedelete worden !*/
-        for (var s in arrayN){
-            string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
-        }
+        // for (var s in arrayN){
+        //     string += "username: " + arrayN[s] + ' status: ' + arrayS[s] +"\n";
+        // }
 
         socket.nsp.to(socket.room).emit('Players', arrayN, arrayS);
 
@@ -290,17 +294,6 @@ io.sockets.on('connection', function(socket) {
             socket.nsp.to(socket.room).emit('GameReady', gameReady);
         }
     });
-
-    socket.on('gameRoomJoin', function (username, room) {
-        socket.username = username;
-        socket.room = room;
-        socket.status = 0;
-        socket.points = 0;
-        usernames[username] = username;
-        socket.join(room);
-        socket.broadcast.to(room).emit('updateRoom');
-
-    })
 
     socket.on('sendchat', function(data) {
         io.sockets["in"](socket.room).emit('updatechat', socket.username, data);
