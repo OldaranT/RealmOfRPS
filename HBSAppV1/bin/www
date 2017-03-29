@@ -119,16 +119,16 @@ io.sockets.on('connection', function (socket) {
 
 
 
+var usernames = {};
+var temp = '';
+var temp2 = '';
+var toRemove;
+var redirect = false;
+
+var rooms = ['Lobby'];
 
 io.sockets.on('connection', function(socket) {
 
-    var usernames = {};
-    var temp = '';
-    var temp2 = '';
-    var toRemove;
-    var redirect = false;
-
-    var rooms = ['Lobby'];
 
     var client_socket;
     var arrayN = [];// array met namen
