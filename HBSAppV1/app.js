@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var index = require('./routes/index');
 var users = require('./routes/users');
 var register = require('./routes/register');
 var room = require('./routes/room');
@@ -27,9 +26,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/index', index);
+app.use('/', register);
+app.use('/index', register);
 app.use('/users', users);
-app.use('/register', register);
 app.use('/room', room);
 app.use('/gameRoom', gameRoom);
 //server.listen(4200);

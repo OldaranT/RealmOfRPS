@@ -169,7 +169,7 @@ io.sockets.on('connection', function(socket) {
         }
 
     });
-    function gamecheck(){
+    function gamecheck(){ // Bereken van score
         var playerIndexArray = [];
         var highest = 0;
         var doublePoints = 1;
@@ -188,7 +188,7 @@ io.sockets.on('connection', function(socket) {
                 }
             }
             arrayP[n] = points;
-            console.log("De speler: " + arrayN[n] + "heeft " + points + " punten en in de json " + arrayP[n]);
+            console.log("De speler: " + arrayN[n] + " heeft " + points + " punten en in de json " + arrayP[n]);
             if(points > highest){
                 highest = points;
                 doublePoints = 1;
@@ -199,18 +199,16 @@ io.sockets.on('connection', function(socket) {
                 playerIndexArray.push(n);
             }
         }
-        if(playerIndexArray.length > 1){
-            console.log('Het is een draw');
+        if(playerIndexArray.length > 1){ // Meerdere mensen hebben hoogste score wat dus resulteert in een gelijk spel
+            console.log('Het is gelijkspel');
             socket.nsp.to(socket.room).emit('GameWinner', null);
-            console.log(socket.room);
-        }else{
+        }else{ // Als één iamand de hoogste score heeft is er een winnaar
             var index = playerIndexArray[0];
-            console.log("Deze speler heeft gewonnen:" + arrayN[index]);
+            console.log("De winnaar is: " + arrayN[index]);
             socket.nsp.to(socket.room).emit('GameWinner', arrayN[index]);
-            console.log(socket.room);
         }
+        console.log("Room: " + socket.room);
         socket.nsp.to(socket.room).emit('GameData', arrayN, arrayP, arrayC);
-
 
     }
     socket.on('users', function () {
@@ -259,14 +257,14 @@ io.sockets.on('connection', function(socket) {
         socket.nsp.to(room).emit('updateRoom');
     });
 
-    socket.on('updateUsers', function (status, choice) {
+    socket.on('updateUsers', function (status, choice) { //status user updaten
         console.log(status + " " + choice);
         socket.status = status;
         socket.choice = choice;
 
     });
 
-    socket.on('gameReadyCheck', function () {
+    socket.on('gameReadyCheck', function () { //Checken of de game gespeeld mag worden (Minstens 2 spelers)
         if(arrayN.length > 1){
             gameReady = true;
             socket.nsp.to(socket.room).emit('GameReady', gameReady);
