@@ -31,11 +31,13 @@ $( document ).ready(function() {
     var string;
     var room;
     var player;
+    var roomID;
     socket.on('connect', function (data) {
         url = window.location.href;
         // alert(url);
         params = parseURLParams(url);
         room = params.Room;
+        roomID = params.ID;
 
         setTitle(room);
         socket.emit('gameRoomJoin', params.Name, room);
@@ -98,6 +100,16 @@ $( document ).ready(function() {
         $('#lobbyReturn').click( function() {
             document.location.href = 'room?name='+ params.Name;
         });
+    });
+
+    $(function(){
+        $('#RestartGame').click( function() {
+            socket.emit('restartGame');
+        });
+    });
+
+    socket.on('restartGame', function () {
+        document.location.href = 'gameRoom?ID=' + roomID + '&Name=' + params.name + '&Room=' + room + 'Lobby&Status=' + params.statusCode;
     });
 
 /*========================Audio====================================================*/
